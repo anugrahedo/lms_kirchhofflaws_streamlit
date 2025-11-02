@@ -1,0 +1,17 @@
+[
+    {
+        "user_id": 1,
+        "course_id": 1,
+        "progress": 0,
+        "completed_modules": [],
+        "last_accessed": "2025-11-01T11:16:40.103599"
+    },
+    {
+        "user_id": 2,
+        "course_id": 1,
+        "progress": 0,
+        "completed_modules": [],
+        "enrolled_at": "2025-10-28T23:45:22.681003",
+        "last_accessed": "2025-10-28T23:45:22.681016"
+    }
+]

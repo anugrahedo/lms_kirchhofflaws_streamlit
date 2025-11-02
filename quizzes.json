@@ -1,0 +1,448 @@
+[
+    {
+        "id": 1,
+        "course_id": 1,
+        "module_id": 1,
+        "title": "Pre-Test Pertemuan Pertama - Hukum Kirchhoff",
+        "description": "Pretest ini bertujuan untuk mengetahui pemahaman awal siswa mengenai konsep dasar listrik arus searah sebelum memulai pembelajaran Hukum Kirchhoff. Soal terdiri dari beberapa pertanyaan pilihan ganda yang mencakup konsep arus, tegangan, hambatan, serta pengantar hukum Kirchhoff. Silakan kerjakan dengan jujur sesuai dengan pengetahuan yang sudah dimiliki.  ",
+        "questions": [
+            {
+                "question": "Besaran yang menyatakan jumlah muatan listrik yang mengalir tiap satuan waktu disebut…  ",
+                "options": [
+                    "Tegangan",
+                    "Hambatan",
+                    "Arus Listrik",
+                    "Daya Listrik",
+                    "Energi Listrik"
+                ],
+                "correct_answer": "Arus Listrik"
+            },
+            {
+                "question": "Alat ukur yang digunakan untuk mengukur arus listrik pada rangkaian adalah…  ",
+                "options": [
+                    "Voltmeter",
+                    "Amperemeter",
+                    "Ohmmeter",
+                    "Wattmeter",
+                    "Multimeter"
+                ],
+                "correct_answer": "Amperemeter"
+            },
+            {
+                "question": "Jika sebuah rangkaian sederhana terdiri dari baterai dan resistor, maka hubungan antara tegangan (V), arus (I), dan hambatan (R) dijelaskan oleh hukum…  ",
+                "options": [
+                    "Hukum Faraday",
+                    "Hukum Ohm",
+                    "Hukum Coulomb",
+                    "Hukum Newton",
+                    "Hukum Ampere"
+                ],
+                "correct_answer": "Hukum Ohm"
+            },
+            {
+                "question": "Pada hukum Kirchhoff I (hukum arus), prinsip dasar yang digunakan adalah…  ",
+                "options": [
+                    "Energi tidak dapat diciptakan maupun dimusnahkan",
+                    "Jumlah arus yang masuk ke suatu titik sama dengan jumlah arus yang keluar",
+                    "Tegangan total dalam rangkaian tertutup sama dengan nol",
+                    "Hambatan total selalu lebih kecil dari hambatan terbesar",
+                    "Arus dalam rangkaian sebanding dengan jumlah hambatan"
+                ],
+                "correct_answer": "Jumlah arus yang masuk ke suatu titik sama dengan jumlah arus yang keluar"
+            },
+            {
+                "question": "Hukum Kirchhoff II (hukum tegangan) menyatakan bahwa…  ",
+                "options": [
+                    "Jumlah arus yang masuk node lebih kecil dari arus yang keluar",
+                    "Energi potensial listrik selalu bernilai positif",
+                    "Jumlah aljabar tegangan dalam suatu loop tertutup sama dengan nol",
+                    "Tegangan selalu konstan dalam semua titik rangkaian",
+                    "Rangkaian seri dan paralel selalu memiliki tegangan yang sama"
+                ],
+                "correct_answer": "Jumlah aljabar tegangan dalam suatu loop tertutup sama dengan nol"
+            }
+        ],
+        "quiz_type": "pre-test",
+        "time_limit": null,
+        "max_attempts": 1,
+        "is_active": true,
+        "created_at": "2025-11-01T14:21:26.946270",
+        "created_by": 1
+    },
+    {
+        "id": 2,
+        "course_id": 1,
+        "module_id": 1,
+        "title": "Pre-Test Pertemuan Pertama - Hukum Kirchhoff",
+        "description": "Pretest ini bertujuan untuk mengetahui pemahaman awal siswa mengenai konsep dasar listrik arus searah sebelum memulai pembelajaran Hukum Kirchhoff. Soal terdiri dari beberapa pertanyaan pilihan ganda yang mencakup konsep arus, tegangan, hambatan, serta pengantar hukum Kirchhoff. Silakan kerjakan dengan jujur sesuai dengan pengetahuan yang sudah dimiliki.  ",
+        "questions": [
+            {
+                "question": "Besaran yang menyatakan jumlah muatan listrik yang mengalir tiap satuan waktu disebut…  ",
+                "options": [
+                    "Tegangan",
+                    "Hambatan",
+                    "Arus Listrik",
+                    "Daya Listrik",
+                    "Energi Listrik"
+                ],
+                "correct_answer": "Arus Listrik"
+            },
+            {
+                "question": "Alat ukur yang digunakan untuk mengukur arus listrik pada rangkaian adalah…  ",
+                "options": [
+                    "Voltmeter",
+                    "Amperemeter",
+                    "Ohmmeter",
+                    "Wattmeter",
+                    "Multimeter"
+                ],
+                "correct_answer": "Amperemeter"
+            },
+            {
+                "question": "Jika sebuah rangkaian sederhana terdiri dari baterai dan resistor, maka hubungan antara tegangan (V), arus (I), dan hambatan (R) dijelaskan oleh hukum…  ",
+                "options": [
+                    "Hukum Faraday",
+                    "Hukum Ohm",
+                    "Hukum Coulomb",
+                    "Hukum Newton",
+                    "Hukum Ampere"
+                ],
+                "correct_answer": "Hukum Ohm"
+            },
+            {
+                "question": "Pada hukum Kirchhoff I (hukum arus), prinsip dasar yang digunakan adalah…  ",
+                "options": [
+                    "Energi tidak dapat diciptakan maupun dimusnahkan",
+                    "Jumlah arus yang masuk ke suatu titik sama dengan jumlah arus yang keluar",
+                    "Tegangan total dalam rangkaian tertutup sama dengan nol",
+                    "Hambatan total selalu lebih kecil dari hambatan terbesar",
+                    "Arus dalam rangkaian sebanding dengan jumlah hambatan"
+                ],
+                "correct_answer": "Jumlah arus yang masuk ke suatu titik sama dengan jumlah arus yang keluar"
+            },
+            {
+                "question": "Hukum Kirchhoff II (hukum tegangan) menyatakan bahwa…  ",
+                "options": [
+                    "Jumlah arus yang masuk node lebih kecil dari arus yang keluar",
+                    "Energi potensial listrik selalu bernilai positif",
+                    "Jumlah aljabar tegangan dalam suatu loop tertutup sama dengan nol",
+                    "Tegangan selalu konstan dalam semua titik rangkaian",
+                    "Rangkaian seri dan paralel selalu memiliki tegangan yang sama"
+                ],
+                "correct_answer": "Jumlah aljabar tegangan dalam suatu loop tertutup sama dengan nol"
+            }
+        ],
+        "quiz_type": "pre-test",
+        "time_limit": null,
+        "max_attempts": 1,
+        "is_active": false,
+        "created_at": "2025-11-01T14:21:32.462010",
+        "created_by": 1
+    },
+    {
+        "id": 3,
+        "course_id": 1,
+        "module_id": 2,
+        "title": "Pre-Test Hukum I Kirchhoff",
+        "description": "Selamat! Kalian telah menyelesaikan sesi belajar tentang Hukum 1 Kirchhoff. Sekarang, saatnya menguji pemahaman kalian dengan kuis singkat ini. Sebelum melangkah ke materi selanjutnya, mari kita pastikan konsep dasar tentang kekekalan arus di titik percabangan ini sudah benar-benar kalian kuasai.",
+        "questions": [
+            {
+                "question": "Dalam suatu rangkaian listrik, terdapat sebuah titik percabangan dimana tiga kabel bertemu. Diketahui arus yang mengalir menuju titik cabang tersebut adalah 5 A dan 3 A. Berapakah besar arus total yang meninggalkan titik cabang tersebut?",
+                "options": [
+                    "2A",
+                    "4A",
+                    "5A",
+                    "8A",
+                    "15A"
+                ],
+                "correct_answer": "8A"
+            },
+            {
+                "question": "Perhatikan pernyataan-pernyataan berikut: (1) Jumlah kuat arus listrik yang masuk ke suatu titik percabangan sama dengan jumlah kuat arus listrik yang keluar dari titik tersebut. (2) Jumlah energi listrik yang masuk ke suatu titik percabangan sama dengan jumlah energi listrik yang keluar dari titik tersebut. (3) Hukum ini berdasarkan pada hukum kekekalan energi. (4) Hukum ini berlaku untuk baik rangkaian seri maupun paralel. (5) Jumlah aljabar semua arus pada suatu titik percabangan sama dengan nol.  Pernyataan yang benar terkait Hukum 1 Kirchhoff ditunjukkan oleh nomor...",
+                "options": [
+                    "(1), (2), dan (3)",
+                    "(1), (4), dan (5)",
+                    "(2), (3), dan (4)",
+                    "(2), (3), dan (5)",
+                    "(3), (4), dan (5)"
+                ],
+                "correct_answer": "(1), (4), dan (5)"
+            },
+            {
+                "question": "Diketahui pada sebuah titik percabangan (node), arus total yang menuju node tersebut adalah 12 A. Jika terdapat tiga cabang arus yang keluar dari node tersebut, dimana dua di antaranya terukur sebesar 5 A dan 3 A, maka besar arus pada cabang ketiga adalah...",
+                "options": [
+                    "4A",
+                    "8A",
+                    "12A",
+                    "15A",
+                    "20A"
+                ],
+                "correct_answer": "4A"
+            }
+        ],
+        "quiz_type": "pre-test",
+        "time_limit": 5,
+        "max_attempts": 1,
+        "is_active": true,
+        "created_at": "2025-11-01T17:27:28.773780",
+        "created_by": 1
+    },
+    {
+        "id": 4,
+        "course_id": 1,
+        "module_id": 3,
+        "title": "Pre-test Praktikum Virtual Hukum I Kirchhoff ",
+        "description": "Pretest ini disusun untuk mengukur pemahaman awal siswa sebelum melaksanakan praktikum virtual tentang Hukum I Kirchhoff (Hukum Arus). Soal-soal berikut akan membantu mengetahui sejauh mana siswa memahami konsep dasar arus listrik, rangkaian bercabang, dan prinsip konservasi muatan pada suatu titik cabang (node).  ",
+        "questions": [
+            {
+                "question": "Hukum Kirchhoff I didasarkan pada prinsip…  ",
+                "options": [
+                    "Kekekalan energi",
+                    "Kekekalan momentum",
+                    "Kekekalan muatan listrik",
+                    "Kekekalan gaya",
+                    "Kekekalan massa"
+                ],
+                "correct_answer": "Kekekalan muatan listrik"
+            },
+            {
+                "question": "Pada sebuah titik percabangan, terdapat arus yang masuk sebesar 3A dan 2A. Jika hanya ada satu cabang keluar, maka besar arus yang keluar adalah…  ",
+                "options": [
+                    "1A",
+                    "2A",
+                    "3A",
+                    "4A",
+                    "5A"
+                ],
+                "correct_answer": "5A"
+            },
+            {
+                "question": "Jika sebuah titik cabang memiliki tiga arus masuk yaitu I₁ = 4 A, I₂ = 2 A, dan I₃ = 1 A, serta dua arus keluar yaitu I₄ dan I₅. Jika I₄ = 5 A, maka besar I₅ adalah…  ",
+                "options": [
+                    "1A",
+                    "2A",
+                    "3A",
+                    "4A",
+                    "5A"
+                ],
+                "correct_answer": "2A"
+            },
+            {
+                "question": "Alat ukur yang dipasang seri dalam rangkaian bercabang untuk mengukur arus listrik adalah…  ",
+                "options": [
+                    "Voltmeter",
+                    "Amperemeter",
+                    "Ohmmeter",
+                    "Wattmeter",
+                    "Galvanometer"
+                ],
+                "correct_answer": "Amperemeter"
+            },
+            {
+                "question": "Jika pada sebuah node berlaku I₁ + I₂ = I₃ + I₄, maka pernyataan tersebut menggambarkan…  ",
+                "options": [
+                    "Hukum Ohm",
+                    "Hukum Faraday",
+                    "Hukum Kirchhoff I",
+                    "Hukum Kirchhoff II",
+                    "Hukum Ampere"
+                ],
+                "correct_answer": "Hukum Kirchhoff I"
+            }
+        ],
+        "quiz_type": "pre-test",
+        "time_limit": 5,
+        "max_attempts": 1,
+        "is_active": true,
+        "created_at": "2025-11-02T12:02:30.710567",
+        "created_by": 1
+    },
+    {
+        "id": 5,
+        "course_id": 1,
+        "module_id": 4,
+        "title": "Pre-Test Hukum II Kirchhoff",
+        "description": "Selamat! Kalian telah menyelesaikan sesi belajar tentang Hukum II Kirchhoff. Sekarang, saatnya menguji pemahaman kalian dengan kuis singkat ini. Kuis ini dirancang untuk memastikan kalian mampu menerapkan konsep Hukum Tegangan Kirchhoff dalam menganalisis rangkaian listrik majemuk. Kemampuan ini sangat penting sebagai fondasi sebelum kita melangkah ke materi yang lebih kompleks.\n\nMari kita ukur sejauh mana pemahaman kalian tentang:\n- Menuliskan persamaan loop dengan tanda yang benar.\n- Memahami arti fisis dari hasil perhitungan (seperti nilai arus negatif).\n- Menerapkan hukum pada rangkaian dengan beberapa ggl dan resistor.\n\nJawablah dengan cermat dan percaya diri. Semoga sukses!",
+        "questions": [
+            {
+                "question": "Sebuah rangkaian listrik memiliki dua loop. Loop pertama terdiri dari baterai 8 V dan resistor 2 Ω. Loop kedua terdiri dari baterai 12 V dan resistor 6 Ω. Sebuah resistor 4 Ω menghubungkan titik percabangan antara kedua loop tersebut. Arus  I1  mengalir dari baterai 8 V, arus  I2 mengalir dari baterai 12 V, dan arus  I3 mengalir melalui resistor 4 Ω. Arah loop 1 dan loop 2 sama-sama ditetapkan searah jarum jam. Persamaan Hukum II Kirchhoff untuk Loop 1 yang benar adalah...",
+                "options": [
+                    "+8 − 2I1 − 4(I1 + I2) = 0",
+                    "−8 + 2I1 ​− 4(I1 ​− I2) = 0",
+                    "+8 − 2I1 ​+ 4(I1 ​− I2) = 0",
+                    "−8 − 2I1 − 4(I1 ​+ I2) = 0",
+                    "+8 − 2I1 ​− 4(I1 ​− I2) = 0"
+                ],
+                "correct_answer": "+8 − 2I1 ​− 4(I1 ​− I2) = 0"
+            },
+            {
+                "question": "Pada rangkaian yang sama dengan soal nomor 1, jika nilai arus  I2  yang dihasilkan dari perhitungan sistem persamaan adalah -0.5 A, apa arti nilai negatif tersebut?",
+                "options": [
+                    "Besar arus  I2 adalah 0.5 A dan arahnya sudah benar sesuai asumsi awal.",
+                    "Kekuatan baterai pada loop kedua tidak cukup untuk melawan baterai pada loop pertama.",
+                    "Arah arus  I2  yang sebenarnya berlawanan dengan arah yang diasumsikan saat membuat persamaan.",
+                    "Terjadi konsleting pada rangkaian loop kedua.",
+                    "Hambatan pada loop kedua terlalu besar sehingga arus tidak dapat mengalir."
+                ],
+                "correct_answer": "Arah arus  I2  yang sebenarnya berlawanan dengan arah yang diasumsikan saat membuat persamaan."
+            },
+            {
+                "question": "Sebuah rangkaian tertutup tunggal terdiri dari dua baterai dan dua resistor. Baterai pertama 6 V dan baterai kedua 3 V dihubungkan secara seri dengan polaritas yang sama (kutub positif bertemu negatif). Keduanya dihubungkan secara seri dengan resistor 1 Ω dan 2 Ω. Persamaan Hukum II Kirchhoff untuk rangkaian ini adalah...",
+                "options": [
+                    "+6 + 3 − 1I − 2I = 0",
+                    "+6 − 3 − 1I − 2I = 0",
+                    "−6 − 3 − 1I − 2I = 0",
+                    "+6 + 3 + 1I + 2I = 0",
+                    "−6 + 3 − 1I − 2I = 0"
+                ],
+                "correct_answer": "+6 + 3 − 1I − 2I = 0"
+            }
+        ],
+        "quiz_type": "pre-test",
+        "time_limit": 10,
+        "max_attempts": 1,
+        "is_active": true,
+        "created_at": "2025-11-02T12:18:42.792625",
+        "created_by": 1
+    },
+    {
+        "id": 6,
+        "course_id": 1,
+        "module_id": 5,
+        "title": "Pre-test Praktikum Virtual Hukum II Kirchhoff",
+        "description": "Pretest ini disusun untuk mengetahui pemahaman awal siswa sebelum melaksanakan praktikum virtual Hukum II Kirchhoff (Hukum Tegangan). Soal-soal berikut mengukur penguasaan konsep dasar tegangan listrik, hubungan tegangan dalam loop tertutup, serta prinsip konservasi energi pada rangkaian listrik.  ",
+        "questions": [
+            {
+                "question": "Prinsip dasar yang digunakan dalam Hukum II Kirchhoff adalah…  ",
+                "options": [
+                    "Kekekalan muatan",
+                    "Kekekalan energi",
+                    "Kekekalan gaya",
+                    "Kekekalan momentum",
+                    "Kekekalan massa"
+                ],
+                "correct_answer": "Kekekalan energi"
+            },
+            {
+                "question": "Hukum II Kirchhoff menyatakan bahwa jumlah aljabar tegangan dalam suatu loop tertutup adalah…  ",
+                "options": [
+                    "Sama dengan nol",
+                    "Selalu bernilai positif",
+                    "Sama dengan kuat arus total",
+                    "Sama dengan jumlah hambatan total",
+                    "Sama dengan beda potensial sumber"
+                ],
+                "correct_answer": "Sama dengan nol"
+            },
+            {
+                "question": "Jika sebuah loop terdiri dari baterai 12 V, resistor 4 Ω dengan arus I, dan resistor 2 Ω dengan arus sama I, maka persamaan hukum II Kirchhoff yang benar adalah…  ",
+                "options": [
+                    "12 – 4I – 2I = 0",
+                    "12 + 4I + 2I = 0",
+                    "4I + 2I = 0",
+                    "12 – I = 0",
+                    "12 – 6 = 0"
+                ],
+                "correct_answer": "12 – 4I – 2I = 0"
+            },
+            {
+                "question": "Besaran yang diukur oleh voltmeter dalam suatu rangkaian adalah…  ",
+                "options": [
+                    "Arus listrik pada cabang",
+                    "Tegangan antara dua titik",
+                    "Hambatan pada rangkaian",
+                    "Daya listrik pada beban",
+                    "Jumlah muatan listrik"
+                ],
+                "correct_answer": "Tegangan antara dua titik"
+            },
+            {
+                "question": "Jika dalam sebuah loop terdapat sumber tegangan E = 10 V, hambatan R₁ = 2 Ω dengan arus I, dan hambatan R₂ = 3 Ω dengan arus sama I, maka persamaan loop-nya adalah…  ",
+                "options": [
+                    "10 + 2I + 3I = 0",
+                    "10 – 2I – 3I = 0",
+                    "10 = 2I – 3I",
+                    "2I + 3I = 0",
+                    "10 – I = 0"
+                ],
+                "correct_answer": "10 – 2I – 3I = 0"
+            }
+        ],
+        "quiz_type": "pre-test",
+        "time_limit": 5,
+        "max_attempts": 1,
+        "is_active": true,
+        "created_at": "2025-11-02T12:23:17.086647",
+        "created_by": 1
+    },
+    {
+        "id": 7,
+        "course_id": 1,
+        "module_id": 6,
+        "title": "Pre-Test Akhir: Hukum Kirchhoff",
+        "description": "Selamat! Kalian telah menyelesaikan seluruh sesi pembelajaran mengenai Hukum Kirchhoff. Sebelum mengerjakan latihan soal lengkap, mari kita ukur pemahaman kalian dengan pre-test singkat ini. Pre-test ini terdiri dari 5 soal pilihan ganda yang mencakup konsep inti dari Hukum I Kirchhoff (Kekekalan Arus) dan Hukum II Kirchhoff (Kekekalan Tegangan).\n\nTujuan pre-test ini adalah untuk memastikan kalian telah memahami prinsip dasar sebelum menerapkannya dalam soal-soal yang lebih kompleks. Jawablah dengan tenang dan percaya diri. Jika ada yang belum dipahami, ini adalah saat yang tepat untuk mengulang materi sebelum melanjutkan.",
+        "questions": [
+            {
+                "question": "Pada sebuah titik percabangan, arus yang masuk adalah  I1 = 5 A dan  I2 = 3 A, sedangkan arus yang keluar adalah  I3 = 4 A dan  I4. Berapakah besar  I4?",
+                "options": [
+                    "2A",
+                    "3A",
+                    "4A",
+                    "5A",
+                    "6A"
+                ],
+                "correct_answer": "4A"
+            },
+            {
+                "question": "Sebuah rangkaian tertutup terdiri dari sumber tegangan 12V dan dua resistor seri 3Ω dan 5Ω. Berapakah kuat arus yang mengalir dalam rangkaian?",
+                "options": [
+                    "1A",
+                    "1.5A",
+                    "2A",
+                    "2.5A",
+                    "3A"
+                ],
+                "correct_answer": "1.5A"
+            },
+            {
+                "question": "Jika dalam sebuah simpul terdapat tiga arus masuk dan dua arus keluar, manakah pernyataan yang benar?",
+                "options": [
+                    "Jumlah arus masuk selalu lebih kecil.",
+                    "Jumlah arus masuk sama dengan jumlah arus keluar.",
+                    "Arus keluar selalu lebih besar.",
+                    "Arus bisa hilang di simpul.",
+                    "Tidak ada hubungan antara arus masuk dan keluar."
+                ],
+                "correct_answer": "Jumlah arus masuk sama dengan jumlah arus keluar."
+            },
+            {
+                "question": "Sebuah rangkaian loop tunggal memiliki dua baterai: 9V dan 3V yang disusun seri dengan polaritas yang sama, serta resistor 4Ω. Berapakah arus yang mengalir?",
+                "options": [
+                    "1A",
+                    "2A",
+                    "3A",
+                    "4A",
+                    "5A"
+                ],
+                "correct_answer": "3A"
+            },
+            {
+                "question": "Dalam Hukum II Kirchhoff, total penurunan tegangan dalam suatu loop tertutup adalah...",
+                "options": [
+                    "Selalu lebih besar dari tegangan sumber",
+                    "Selalu sama dengan total tegangan sumber",
+                    "Tidak tergantung pada arus",
+                    "Selalu nol",
+                    "Berlawanan dengan arah arus"
+                ],
+                "correct_answer": "Selalu sama dengan total tegangan sumber"
+            }
+        ],
+        "quiz_type": "pre-test",
+        "time_limit": 5,
+        "max_attempts": 1,
+        "is_active": true,
+        "created_at": "2025-11-02T12:31:45.825373",
+        "created_by": 1
+    }
+]

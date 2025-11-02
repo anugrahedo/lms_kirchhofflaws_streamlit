@@ -1,0 +1,30 @@
+[
+    {
+        "course_id": 1,
+        "code": "YM6U42S7",
+        "is_active": false,
+        "created_at": "2025-10-28T20:09:30.222527",
+        "max_students": null
+    },
+    {
+        "course_id": 1,
+        "code": "1LI8Q9ZT",
+        "is_active": false,
+        "created_at": "2025-10-28T20:10:38.553205",
+        "max_students": null
+    },
+    {
+        "course_id": 1,
+        "code": "8YXY1ARX",
+        "is_active": false,
+        "created_at": "2025-10-28T22:43:23.495834",
+        "max_students": null
+    },
+    {
+        "course_id": 1,
+        "code": "EMOWCIAR",
+        "is_active": true,
+        "created_at": "2025-11-01T13:37:22.440787",
+        "max_students": null
+    }
+]

@@ -1,0 +1,30 @@
+[
+    {
+        "user_id": 2,
+        "course_id": 1,
+        "date": "2025-10-28",
+        "status": "Hadir",
+        "marked_at": "2025-10-28T23:45:40.247237"
+    },
+    {
+        "user_id": 2,
+        "course_id": 1,
+        "date": "2025-10-30",
+        "status": "Hadir",
+        "marked_at": "2025-10-30T20:12:12.115659"
+    },
+    {
+        "user_id": 2,
+        "course_id": 1,
+        "date": "2025-11-01",
+        "status": "Hadir",
+        "marked_at": "2025-11-01T12:14:26.536899"
+    },
+    {
+        "user_id": 2,
+        "course_id": 1,
+        "date": "2025-11-02",
+        "status": "Hadir",
+        "marked_at": "2025-11-02T12:32:52.860852"
+    }
+]

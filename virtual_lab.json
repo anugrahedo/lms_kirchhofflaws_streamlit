@@ -1,0 +1,424 @@
+[
+    {
+        "id": 1,
+        "user_id": 1,
+        "circuit_type": "series",
+        "parameters": {
+            "voltage": 9.0,
+            "R1": 10.0,
+            "R2": 20.0,
+            "R3": 0.0
+        },
+        "results": {
+            "I_total": 0.3,
+            "V1": 3.0,
+            "V2": 6.0,
+            "V3": 0.0,
+            "R_total": 30.0,
+            "P_total": 2.7
+        },
+        "analysis": [
+            "✅ Hukum Kirchhoff 1 (KCL): Arus sama di semua titik = 0.3 A",
+            "✅ Hukum Kirchhoff 2 (KVL): ΣV = 9.0 V"
+        ],
+        "created_at": "2025-10-28T21:20:14.550480"
+    },
+    {
+        "id": 2,
+        "user_id": 1,
+        "circuit_type": "parallel",
+        "parameters": {
+            "voltage": 16.0,
+            "R1": 5.0,
+            "R2": 9.0,
+            "R3": 10.0
+        },
+        "results": {
+            "I_total": 6.578,
+            "I1": 3.2,
+            "I2": 1.778,
+            "I3": 1.6,
+            "R_total": 2.432,
+            "P_total": 105.244
+        },
+        "analysis": [
+            "✅ Hukum Kirchhoff 1 (KCL): I_total = ΣI_cabang = 6.577999999999999 A",
+            "✅ Hukum Kirchhoff 2 (KVL): Tegangan sama di semua cabang paralel"
+        ],
+        "created_at": "2025-10-28T21:22:42.508365"
+    },
+    {
+        "id": 3,
+        "user_id": 1,
+        "circuit_type": "parallel",
+        "parameters": {
+            "voltage": 16.0,
+            "R1": 5.0,
+            "R2": 9.0,
+            "R3": 10.0
+        },
+        "results": {
+            "I_total": 6.578,
+            "I1": 3.2,
+            "I2": 1.778,
+            "I3": 1.6,
+            "R_total": 2.432,
+            "P_total": 105.244
+        },
+        "analysis": [
+            "✅ Hukum Kirchhoff 1 (KCL): I_total = ΣI_cabang = 6.577999999999999 A",
+            "✅ Hukum Kirchhoff 2 (KVL): Tegangan sama di semua cabang paralel"
+        ],
+        "created_at": "2025-10-28T21:23:05.381459"
+    },
+    {
+        "id": 4,
+        "user_id": 1,
+        "circuit_type": "parallel",
+        "parameters": {
+            "voltage": 10.3,
+            "R1": 5.0,
+            "R2": 9.0,
+            "R3": 10.0
+        },
+        "results": {
+            "I_total": 4.234,
+            "I1": 2.06,
+            "I2": 1.144,
+            "I3": 1.03,
+            "R_total": 2.432,
+            "P_total": 43.615
+        },
+        "analysis": [
+            "✅ Hukum Kirchhoff 1 (KCL): I_total = ΣI_cabang = 4.234 A",
+            "✅ Hukum Kirchhoff 2 (KVL): Tegangan sama di semua cabang paralel"
+        ],
+        "created_at": "2025-10-28T21:23:10.370986"
+    },
+    {
+        "id": 5,
+        "user_id": 1,
+        "circuit_type": "complex",
+        "parameters": {
+            "V1": 12.0,
+            "V2": 6.0,
+            "R1": 10.0,
+            "R2": 20.0,
+            "R3": 30.0
+        },
+        "results": {
+            "I_loop1": 0.436,
+            "I_loop2": 0.055,
+            "I_R1": 0.436,
+            "I_R2": 0.382,
+            "I_R3": 0.055,
+            "V_R1": 4.364,
+            "V_R2": 7.636,
+            "V_R3": 1.636,
+            "P_total": 5.564
+        },
+        "analysis": [
+            "✅ Hukum Kirchhoff 1 (KCL): ΣI_masuk = ΣI_keluar, selisih = 0.001 A",
+            "✅ Hukum Kirchhoff 2 (KVL): ΣV_loop1 = 0.0 V, ΣV_loop2 = 12.0 V"
+        ],
+        "created_at": "2025-10-28T21:40:01.563374"
+    },
+    {
+        "id": 6,
+        "user_id": 1,
+        "circuit_type": "parallel",
+        "parameters": {
+            "voltage": 12.0,
+            "R1": 46.0,
+            "R2": 46.0,
+            "R3": 0.0
+        },
+        "results": {
+            "I_total": 0.522,
+            "I1": 0.261,
+            "I2": 0.261,
+            "I3": 0,
+            "R_total": 23.0,
+            "P_total": 6.261
+        },
+        "analysis": [
+            "✅ Hukum Kirchhoff 1 (KCL): I_total = ΣI_cabang = 0.522 A",
+            "✅ Hukum Kirchhoff 2 (KVL): Tegangan sama di semua cabang paralel"
+        ],
+        "created_at": "2025-10-28T21:40:16.652234"
+    },
+    {
+        "id": 7,
+        "user_id": 1,
+        "circuit_type": "series",
+        "parameters": {
+            "voltage": 17.2,
+            "R1": 10.0,
+            "R2": 20.0,
+            "R3": 0.0
+        },
+        "results": {
+            "I_total": 0.573,
+            "V1": 5.733,
+            "V2": 11.467,
+            "V3": 0.0,
+            "R_total": 30.0,
+            "P_total": 9.861
+        },
+        "analysis": [
+            "✅ Hukum Kirchhoff 1 (KCL): Arus sama di semua titik = 0.573 A",
+            "✅ Hukum Kirchhoff 2 (KVL): ΣV = 17.2 V"
+        ],
+        "created_at": "2025-10-28T21:40:22.108655"
+    },
+    {
+        "id": 8,
+        "user_id": 1,
+        "circuit_type": "series",
+        "parameters": {
+            "voltage": 12.0,
+            "R1": 10.0,
+            "R2": 20.0,
+            "R3": 0.0
+        },
+        "results": {
+            "I_total": 0.4,
+            "V1": 4.0,
+            "V2": 8.0,
+            "V3": 0.0,
+            "R_total": 30.0,
+            "P_total": 4.8
+        },
+        "analysis": [
+            "✅ Hukum Kirchhoff 1 (KCL): Arus sama di semua titik = 0.4 A",
+            "✅ Hukum Kirchhoff 2 (KVL): ΣV = 12.0 V"
+        ],
+        "created_at": "2025-10-28T22:40:42.147185"
+    },
+    {
+        "id": 9,
+        "user_id": 1,
+        "circuit_type": "parallel",
+        "parameters": {
+            "voltage": 8.0,
+            "R1": 10.0,
+            "R2": 20.0,
+            "R3": 0.0
+        },
+        "results": {
+            "I_total": 1.2,
+            "I1": 0.8,
+            "I2": 0.4,
+            "I3": 0,
+            "R_total": 6.667,
+            "P_total": 9.6
+        },
+        "analysis": [
+            "✅ Hukum Kirchhoff 1 (KCL): I_total = ΣI_cabang = 1.2000000000000002 A",
+            "✅ Hukum Kirchhoff 2 (KVL): Tegangan sama di semua cabang paralel"
+        ],
+        "created_at": "2025-10-28T22:40:47.756106"
+    },
+    {
+        "id": 10,
+        "user_id": 1,
+        "circuit_type": "complex",
+        "parameters": {
+            "V1": 16.1,
+            "V2": 6.0,
+            "R1": 10.0,
+            "R2": 20.0,
+            "R3": 30.0
+        },
+        "results": {
+            "I_loop1": 0.623,
+            "I_loop2": 0.129,
+            "I_R1": 0.623,
+            "I_R2": 0.494,
+            "I_R3": 0.129,
+            "V_R1": 6.227,
+            "V_R2": 9.873,
+            "V_R3": 3.873,
+            "P_total": 10.8
+        },
+        "analysis": [
+            "✅ Hukum Kirchhoff 1 (KCL): ΣI_masuk = ΣI_keluar, selisih = 0.0 A",
+            "✅ Hukum Kirchhoff 2 (KVL): ΣV_loop1 = 0.0 V, ΣV_loop2 = 12.0 V"
+        ],
+        "created_at": "2025-10-28T22:40:52.801666"
+    },
+    {
+        "id": 11,
+        "user_id": 2,
+        "circuit_type": "series",
+        "parameters": {
+            "voltage": 12.0,
+            "R1": 100.0,
+            "R2": 200.0
+        },
+        "results": {
+            "I_total": 0.04,
+            "V1": 4.0,
+            "V2": 8.0,
+            "V3": 0.0,
+            "R_total": 300.0,
+            "P_total": 0.48
+        },
+        "analysis": [
+            "✅ Hukum Kirchhoff 1 (KCL): Arus sama di semua titik = 0.04 A",
+            "✅ Hukum Kirchhoff 2 (KVL): ΣV = 12.0 V"
+        ],
+        "created_at": "2025-10-30T21:45:59.476299"
+    },
+    {
+        "id": 12,
+        "user_id": 2,
+        "circuit_type": "parallel",
+        "parameters": {
+            "voltage": 12.0,
+            "R1": 100.0,
+            "R2": 200.0
+        },
+        "results": {
+            "I_total": 0.18,
+            "I1": 0.12,
+            "I2": 0.06,
+            "I3": 0,
+            "R_total": 66.667,
+            "P_total": 2.16
+        },
+        "analysis": [
+            "✅ Hukum Kirchhoff 1 (KCL): I_total = ΣI_cabang = 0.18 A",
+            "✅ Hukum Kirchhoff 2 (KVL): Tegangan sama di semua cabang paralel"
+        ],
+        "created_at": "2025-10-30T21:46:18.670093"
+    },
+    {
+        "id": 13,
+        "user_id": 2,
+        "circuit_type": "complex",
+        "parameters": {
+            "V1": 12.0,
+            "V2": 6.0,
+            "R1": 100.0,
+            "R2": 200.0,
+            "R3": 300.0
+        },
+        "results": {
+            "I_loop1": 0.044,
+            "I_loop2": 0.005,
+            "I_R1": 0.044,
+            "I_R2": 0.038,
+            "I_R3": 0.005,
+            "V_R1": 4.364,
+            "V_R2": 7.636,
+            "V_R3": 1.636,
+            "P_total": 0.556
+        },
+        "analysis": [
+            "✅ Hukum Kirchhoff 1 (KCL): ΣI_masuk = ΣI_keluar, selisih = 0.001 A",
+            "✅ Hukum Kirchhoff 2 (KVL): ΣV_loop1 = 0.0 V, ΣV_loop2 = 12.0 V"
+        ],
+        "created_at": "2025-10-30T21:46:28.213320"
+    },
+    {
+        "id": 14,
+        "user_id": 1,
+        "circuit_type": "series",
+        "parameters": {
+            "voltage": 12.0,
+            "R1": 10.0,
+            "R2": 20.0,
+            "R3": 0.0
+        },
+        "results": {
+            "I_total": 0.4,
+            "V1": 4.0,
+            "V2": 8.0,
+            "V3": 0.0,
+            "R_total": 30.0,
+            "P_total": 4.8
+        },
+        "analysis": [
+            "✅ Hukum Kirchhoff 1 (KCL): Arus sama di semua titik = 0.4 A",
+            "✅ Hukum Kirchhoff 2 (KVL): ΣV = 12.0 V"
+        ],
+        "created_at": "2025-10-30T21:52:24.493310"
+    },
+    {
+        "id": 15,
+        "user_id": 2,
+        "circuit_type": "series",
+        "parameters": {
+            "voltage": 12.0,
+            "R1": 10.0,
+            "R2": 20.0,
+            "R3": 0.0
+        },
+        "results": {
+            "I_total": 0.4,
+            "V1": 4.0,
+            "V2": 8.0,
+            "V3": 0.0,
+            "R_total": 30.0,
+            "P_total": 4.8
+        },
+        "analysis": [
+            "✅ Hukum Kirchhoff 1 (KCL): Arus sama di semua titik = 0.4 A",
+            "✅ Hukum Kirchhoff 2 (KVL): ΣV = 12.0 V"
+        ],
+        "created_at": "2025-11-01T13:35:27.617967"
+    },
+    {
+        "id": 16,
+        "user_id": 2,
+        "circuit_type": "parallel",
+        "parameters": {
+            "voltage": 12.0,
+            "R1": 10.0,
+            "R2": 20.0,
+            "R3": 0.0
+        },
+        "results": {
+            "I_total": 1.8,
+            "I1": 1.2,
+            "I2": 0.6,
+            "I3": 0,
+            "R_total": 6.667,
+            "P_total": 21.6
+        },
+        "analysis": [
+            "✅ Hukum Kirchhoff 1 (KCL): I_total = ΣI_cabang = 1.7999999999999998 A",
+            "✅ Hukum Kirchhoff 2 (KVL): Tegangan sama di semua cabang paralel"
+        ],
+        "created_at": "2025-11-01T13:35:36.885744"
+    },
+    {
+        "id": 17,
+        "user_id": 2,
+        "circuit_type": "complex",
+        "parameters": {
+            "V1": 12.0,
+            "V2": 6.0,
+            "R1": 10.0,
+            "R2": 20.0,
+            "R3": 30.0
+        },
+        "results": {
+            "I_loop1": 0.436,
+            "I_loop2": 0.055,
+            "I_R1": 0.436,
+            "I_R2": 0.382,
+            "I_R3": 0.055,
+            "V_R1": 4.364,
+            "V_R2": 7.636,
+            "V_R3": 1.636,
+            "P_total": 5.564
+        },
+        "analysis": [
+            "✅ Hukum Kirchhoff 1 (KCL): ΣI_masuk = ΣI_keluar, selisih = 0.001 A",
+            "✅ Hukum Kirchhoff 2 (KVL): ΣV_loop1 = 0.0 V, ΣV_loop2 = 12.0 V"
+        ],
+        "created_at": "2025-11-01T13:35:40.714740"
+    }
+]

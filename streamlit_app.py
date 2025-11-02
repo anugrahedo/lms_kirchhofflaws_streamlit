@@ -26,8 +26,12 @@ FORUM_FILE = "forum.json"
 COURSE_CODES_FILE = "course_codes.json"
 NOTIFICATIONS_FILE = "notifications.json"
 ASSIGNMENTS_FILE = "assignments.json"
-SUBMISSIONS_FILE = "submissions.json"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+SUBMISSIONS_FILE = os.path.join(BASE_DIR, "submissions.json")
 VIRTUAL_LAB_FILE = "virtual_lab.json"
+QUIZZES_FILE = "quizzes.json"
+QUIZ_RESULTS_FILE = "quiz_results.json"
+MEDIA_FILE = "media_ajar.json"
 
 # ===================== CSS Custom ===================== #
 def inject_custom_css():
@@ -169,6 +173,40 @@ def inject_custom_css():
         margin-bottom: 20px;
     }
     
+    .quiz-card {
+        background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
+        color: white;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 10px 0;
+    }
+    
+    .question-card {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 15px;
+        margin: 10px 0;
+        border-left: 4px solid #3498db;
+    }
+    
+    .correct-answer {
+        background: #d4edda !important;
+        border-left: 4px solid #28a745 !important;
+    }
+    
+    .wrong-answer {
+        background: #f8d7da !important;
+        border-left: 4px solid #dc3545 !important;
+    }
+    
+    .media-card {
+        background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        border-radius: 10px;
+        padding: 15px;
+        margin: 10px 0;
+        border-left: 4px solid #3498db;
+    }
+    
     @keyframes electricPulse {
         0% { box-shadow: 0 0 5px #3498db; }
         50% { box-shadow: 0 0 20px #3498db, 0 0 30px #2980b9; }
@@ -183,11 +221,14 @@ def inject_custom_css():
 
 # ===================== Helper I/O ===================== #
 def load_data(filename):
-    try:
-        with open(filename, "r", encoding="utf-8") as f:
+    if not os.path.exists(filename):
+        with open(filename, "w", encoding="utf-8") as f:
+            f.write("[]")  # buat file json kosong
+    with open(filename, "r", encoding="utf-8") as f:
+        try:
             return json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        return []
+        except:
+            return []
 
 def save_data(data, filename):
     with open(filename, "w", encoding="utf-8") as f:
@@ -199,7 +240,8 @@ def generate_course_code(length=8):
 
 def init_data():
     for f in [COURSES_FILE, USERS_FILE, PROGRESS_FILE, ATTENDANCE_FILE, FORUM_FILE, 
-              COURSE_CODES_FILE, NOTIFICATIONS_FILE, ASSIGNMENTS_FILE, SUBMISSIONS_FILE, VIRTUAL_LAB_FILE]:
+              COURSE_CODES_FILE, NOTIFICATIONS_FILE, ASSIGNMENTS_FILE, SUBMISSIONS_FILE, 
+              VIRTUAL_LAB_FILE, QUIZZES_FILE, QUIZ_RESULTS_FILE, MEDIA_FILE]:
         if not os.path.exists(f):
             with open(f, "w", encoding="utf-8") as file:
                 json.dump([], file)
@@ -244,6 +286,314 @@ def init_data():
                 "max_students": None
             })
             save_data(course_codes, COURSE_CODES_FILE)
+
+# ===================== Media Ajar System ===================== #
+def save_media_file(file_data, file_name, file_type, file_size, media_type, description=""):
+    """Menyimpan file media ajar"""
+    media_data = load_data(MEDIA_FILE)
+    
+    new_media = {
+        "id": len(media_data) + 1,
+        "file_name": file_name,
+        "file_type": file_type,
+        "file_size": file_size,
+        "media_type": media_type,  # modul_ajar, bahan_ajar, lkpd, media_pembelajaran
+        "description": description,
+        "file_data": base64.b64encode(file_data).decode(),
+        "uploaded_at": datetime.now().isoformat(),
+        "uploaded_by": st.session_state.current_user.get("id") if st.session_state.authenticated else None
+    }
+    
+    media_data.append(new_media)
+    save_data(media_data, MEDIA_FILE)
+    return new_media
+
+def get_media_by_id(media_id):
+    """Mendapatkan media berdasarkan ID"""
+    media_data = load_data(MEDIA_FILE)
+    return next((m for m in media_data if m.get("id") == media_id), None)
+
+def get_media_by_module(course_id, module_id):
+    """Mendapatkan semua media untuk modul tertentu"""
+    courses = load_data(COURSES_FILE)
+    course = next((c for c in courses if c.get("id") == course_id), None)
+    if not course:
+        return []
+    
+    modules = course.get("modules", [])
+    module = next((m for m in modules if m.get("id") == module_id), None)
+    if not module:
+        return []
+    
+    media_ids = module.get("media_ids", [])
+    media_data = load_data(MEDIA_FILE)
+    
+    return [m for m in media_data if m.get("id") in media_ids]
+
+def add_media_to_module(course_id, module_id, media_id):
+    """Menambahkan media ke modul"""
+    courses = load_data(COURSES_FILE)
+    
+    for course in courses:
+        if course.get("id") == course_id:
+            modules = course.get("modules", [])
+            for module in modules:
+                if module.get("id") == module_id:
+                    if "media_ids" not in module:
+                        module["media_ids"] = []
+                    if media_id not in module["media_ids"]:
+                        module["media_ids"].append(media_id)
+                    break
+    
+    save_data(courses, COURSES_FILE)
+    return True
+
+def remove_media_from_module(course_id, module_id, media_id):
+    """Menghapus media dari modul"""
+    courses = load_data(COURSES_FILE)
+    
+    for course in courses:
+        if course.get("id") == course_id:
+            modules = course.get("modules", [])
+            for module in modules:
+                if module.get("id") == module_id:
+                    if "media_ids" in module and media_id in module["media_ids"]:
+                        module["media_ids"].remove(media_id)
+                    break
+    
+    save_data(courses, COURSES_FILE)
+    return True
+
+def delete_media_file(media_id):
+    """Menghapus file media"""
+    media_data = load_data(MEDIA_FILE)
+    media_data = [m for m in media_data if m.get("id") != media_id]
+    save_data(media_data, MEDIA_FILE)
+    return True
+
+def get_file_icon(file_type):
+    """Mendapatkan icon berdasarkan tipe file"""
+    if file_type.startswith('image/'):
+        return "🖼️"
+    elif file_type.startswith('video/'):
+        return "🎥"
+    elif file_type.startswith('audio/'):
+        return "🎵"
+    elif file_type == 'application/pdf':
+        return "📕"
+    elif 'word' in file_type or file_type.endswith('.doc') or file_type.endswith('.docx'):
+        return "📄"
+    elif 'powerpoint' in file_type or file_type.endswith('.ppt') or file_type.endswith('.pptx'):
+        return "📊"
+    elif 'excel' in file_type or file_type.endswith('.xls') or file_type.endswith('.xlsx'):
+        return "📈"
+    elif 'zip' in file_type or file_type.endswith('.rar'):
+        return "📦"
+    else:
+        return "📎"
+
+def format_file_size(size_bytes):
+    """Format ukuran file menjadi readable"""
+    if size_bytes == 0:
+        return "0 B"
+    size_names = ["B", "KB", "MB", "GB"]
+    i = 0
+    while size_bytes >= 1024 and i < len(size_names)-1:
+        size_bytes /= 1024.0
+        i += 1
+    return f"{size_bytes:.1f} {size_names[i]}"
+
+def display_media_content(media):
+    """Menampilkan konten media langsung di LMS"""
+    file_data = base64.b64decode(media.get("file_data"))
+    file_type = media.get("file_type")
+    file_name = media.get("file_name")
+    
+    st.markdown(f"""
+    <div class='media-card'>
+        <h4>{get_file_icon(file_type)} {file_name}</h4>
+        <p><strong>Jenis:</strong> {media.get('media_type').replace('_', ' ').title()} | 
+           <strong>Ukuran:</strong> {format_file_size(media.get('file_size'))}</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    if media.get("description"):
+        st.info(f"**Deskripsi:** {media.get('description')}")
+    
+    # Tampilkan konten berdasarkan tipe file
+    if file_type.startswith('image/'):
+        st.image(file_data, caption=file_name, use_column_width=True)
+    
+    elif file_type.startswith('video/'):
+        st.video(file_data)
+    
+    elif file_type.startswith('audio/'):
+        st.audio(file_data)
+    
+    elif file_type == 'application/pdf':
+        # Untuk PDF, tampilkan download link dan preview jika memungkinkan
+        st.markdown(create_download_link(file_data, file_name, file_type), unsafe_allow_html=True)
+        st.info("📖 PDF dapat diunduh dan dibuka di perangkat Anda")
+    
+    elif file_type in ['application/vnd.openxmlformats-officedocument.wordprocessingml.document', 
+                      'application/msword']:
+        st.markdown(create_download_link(file_data, file_name, file_type), unsafe_allow_html=True)
+        st.info("📄 Dokumen Word - Silakan unduh untuk melihat konten")
+    
+    elif file_type in ['application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                      'application/vnd.ms-powerpoint']:
+        st.markdown(create_download_link(file_data, file_name, file_type), unsafe_allow_html=True)
+        st.info("📊 Presentasi PowerPoint - Silakan unduh untuk melihat konten")
+    
+    else:
+        st.markdown(create_download_link(file_data, file_name, file_type), unsafe_allow_html=True)
+        st.info("📎 File dapat diunduh untuk dilihat")
+
+def create_download_link(file_data, file_name, file_type):
+    """Membuat link download untuk file"""
+    b64 = base64.b64encode(file_data).decode()
+    href = f'<a href="data:{file_type};base64,{b64}" download="{file_name}" style="background: #3498db; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 5px 0;">📥 Download {file_name}</a>'
+    return href
+
+# ===================== Quiz System ===================== #
+def create_quiz(course_id, module_id, title, description, questions, quiz_type="pre-test", time_limit=None, max_attempts=1):
+    """Membuat kuis baru"""
+    quizzes = load_data(QUIZZES_FILE)
+    
+    new_quiz = {
+        "id": len(quizzes) + 1,
+        "course_id": course_id,
+        "module_id": module_id,
+        "title": title,
+        "description": description,
+        "questions": questions,
+        "quiz_type": quiz_type,
+        "time_limit": time_limit,
+        "max_attempts": max_attempts,
+        "is_active": True,
+        "created_at": datetime.now().isoformat(),
+        "created_by": st.session_state.current_user.get("id") if st.session_state.authenticated else None
+    }
+    
+    quizzes.append(new_quiz)
+    save_data(quizzes, QUIZZES_FILE)
+    
+    # Notifikasi untuk siswa yang terdaftar
+    users = load_data(USERS_FILE)
+    enrolled_students = [u for u in users if u.get("role") == "student" and course_id in u.get("enrolled_courses", [])]
+    
+    for student in enrolled_students:
+        create_notification(
+            student.get("id"),
+            "📝 Kuis Baru",
+            f"Kuis {quiz_type}: {title} untuk Modul {module_id} telah tersedia.",
+            "info",
+            course_id,
+            module_id
+        )
+    
+    return new_quiz
+
+def get_quizzes(course_id, module_id=None, quiz_type=None):
+    """Mendapatkan daftar kuis"""
+    quizzes = load_data(QUIZZES_FILE)
+    filtered_quizzes = [q for q in quizzes if q.get("course_id") == course_id and q.get("is_active")]
+    
+    if module_id:
+        filtered_quizzes = [q for q in filtered_quizzes if q.get("module_id") == module_id]
+    
+    if quiz_type:
+        filtered_quizzes = [q for q in filtered_quizzes if q.get("quiz_type") == quiz_type]
+    
+    return filtered_quizzes
+
+def get_quiz_by_id(quiz_id):
+    """Mendapatkan kuis berdasarkan ID"""
+    quizzes = load_data(QUIZZES_FILE)
+    return next((q for q in quizzes if q.get("id") == quiz_id), None)
+
+def submit_quiz_result(quiz_id, user_id, answers, score, total_questions, time_taken=None):
+    """Menyimpan hasil kuis"""
+    quiz_results = load_data(QUIZ_RESULTS_FILE)
+    
+    # Hitung attempt number
+    user_attempts = [r for r in quiz_results if r.get("quiz_id") == quiz_id and r.get("user_id") == user_id]
+    attempt_number = len(user_attempts) + 1
+    
+    new_result = {
+        "id": len(quiz_results) + 1,
+        "quiz_id": quiz_id,
+        "user_id": user_id,
+        "answers": answers,
+        "score": score,
+        "total_questions": total_questions,
+        "percentage": round((score / total_questions) * 100, 2),
+        "attempt_number": attempt_number,
+        "time_taken": time_taken,
+        "submitted_at": datetime.now().isoformat()
+    }
+    
+    quiz_results.append(new_result)
+    save_data(quiz_results, QUIZ_RESULTS_FILE)
+    
+    # Notifikasi untuk admin
+    quiz = get_quiz_by_id(quiz_id)
+    if quiz:
+        users = load_data(USERS_FILE)
+        student = next((u for u in users if u.get("id") == user_id), None)
+        admins = [u for u in users if u.get("role") == "admin"]
+        
+        for admin in admins:
+            create_notification(
+                admin.get("id"),
+                "📊 Kuis Diselesaikan",
+                f"{student.get('name')} menyelesaikan kuis '{quiz.get('title')}' dengan nilai {new_result['percentage']}%",
+                "info",
+                quiz.get("course_id"),
+                quiz.get("module_id")
+            )
+    
+    return new_result
+
+def get_quiz_results(quiz_id=None, user_id=None):
+    """Mendapatkan hasil kuis"""
+    quiz_results = load_data(QUIZ_RESULTS_FILE)
+    
+    if quiz_id:
+        quiz_results = [r for r in quiz_results if r.get("quiz_id") == quiz_id]
+    
+    if user_id:
+        quiz_results = [r for r in quiz_results if r.get("user_id") == user_id]
+    
+    return quiz_results
+
+def get_user_quiz_attempts(quiz_id, user_id):
+    """Mendapatkan jumlah attempt user untuk kuis tertentu"""
+    quiz_results = load_data(QUIZ_RESULTS_FILE)
+    return [r for r in quiz_results if r.get("quiz_id") == quiz_id and r.get("user_id") == user_id]
+
+def calculate_quiz_score(questions, user_answers):
+    """Menghitung skor kuis"""
+    score = 0
+    detailed_results = []
+    
+    for i, question in enumerate(questions):
+        user_answer = user_answers.get(f"q_{i}")
+        correct_answer = question.get("correct_answer")
+        is_correct = user_answer == correct_answer
+        
+        if is_correct:
+            score += 1
+        
+        detailed_results.append({
+            "question": question.get("question"),
+            "user_answer": user_answer,
+            "correct_answer": correct_answer,
+            "is_correct": is_correct,
+            "options": question.get("options", [])
+        })
+    
+    return score, detailed_results
 
 # ===================== Virtual Lab System ===================== #
 def save_lab_result(user_id, circuit_type, parameters, results, analysis):
@@ -682,6 +1032,423 @@ def show_lab_history():
             for line in result['analysis']:
                 st.write(line)
 
+# ===================== Quiz UI Components ===================== #
+def show_quiz_ui(course_id, module_id):
+    """Menampilkan UI kuis untuk modul tertentu"""
+    st.markdown("""
+    <div class='quiz-card'>
+        <h3>📝 Kuis Modul</h3>
+        <p>Uji pemahaman Anda tentang materi modul ini dengan mengerjakan kuis berikut.</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    quizzes = get_quizzes(course_id, module_id)
+    current_user = st.session_state.current_user
+    
+    if not quizzes:
+        st.info("Belum ada kuis untuk modul ini.")
+        return
+    
+    for quiz in quizzes:
+        with st.expander(f"🧠 {quiz.get('title')} - {quiz.get('quiz_type').title()}", expanded=True):
+            st.write(f"**Deskripsi:** {quiz.get('description')}")
+            st.write(f"**Jumlah Soal:** {len(quiz.get('questions', []))}")
+            st.write(f"**Batas Attempt:** {quiz.get('max_attempts', 1)}")
+            
+            if quiz.get('time_limit'):
+                st.write(f"**Batas Waktu:** {quiz.get('time_limit')} menit")
+            
+            # Cek attempt user
+            user_attempts = get_user_quiz_attempts(quiz.get("id"), current_user.get("id"))
+            max_attempts = quiz.get("max_attempts", 1)
+            
+            if len(user_attempts) >= max_attempts:
+                st.warning(f"❌ Anda sudah mencapai batas attempt ({max_attempts}) untuk kuis ini.")
+                
+                # Tampilkan hasil terbaik
+                best_result = max(user_attempts, key=lambda x: x.get("percentage", 0))
+                st.write(f"**Nilai Terbaik:** {best_result.get('percentage')}%")
+                
+                if st.button("📊 Lihat Detail Hasil", key=f"view_results_{quiz.get('id')}"):
+                    show_quiz_results_detail(quiz, user_attempts)
+            else:
+                remaining_attempts = max_attempts - len(user_attempts)
+                st.success(f"✅ Anda memiliki {remaining_attempts} attempt tersisa.")
+                
+                if st.button("🚀 Mulai Kuis", key=f"start_quiz_{quiz.get('id')}"):
+                    st.session_state.current_quiz = quiz
+                    st.session_state.quiz_answers = {}
+                    st.session_state.quiz_started = True
+                    st.rerun()
+
+def show_quiz_interface():
+    """Menampilkan interface untuk mengerjakan kuis"""
+    if not hasattr(st.session_state, 'current_quiz') or not st.session_state.current_quiz:
+        st.warning("Tidak ada kuis yang aktif.")
+        return
+    
+    quiz = st.session_state.current_quiz
+    questions = quiz.get("questions", [])
+    
+    st.markdown(f"""
+    <div class='main-header'>
+        <h2>🧠 {quiz.get('title')}</h2>
+        <p>{quiz.get('description')}</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Form kuis
+    with st.form(key="quiz_form"):
+        st.subheader("📝 Soal-soal Kuis")
+        
+        for i, question in enumerate(questions):
+            st.markdown(f"**{i+1}. {question.get('question')}**")
+            
+            options = question.get("options", [])
+            user_answer = st.radio(
+                f"Pilih jawaban untuk soal {i+1}:",
+                options,
+                key=f"q_{i}",
+                index=None
+            )
+            
+            if user_answer:
+                st.session_state.quiz_answers[f"q_{i}"] = user_answer
+            
+            st.markdown("---")
+        
+        # Tombol submit
+        submitted = st.form_submit_button("✅ Submit Kuis", use_container_width=True)
+        
+        if submitted:
+            # Validasi jawaban
+            if len(st.session_state.quiz_answers) != len(questions):
+                st.error("❌ Harap jawab semua soal sebelum submit!")
+                return
+            
+            # Hitung skor
+            score, detailed_results = calculate_quiz_score(questions, st.session_state.quiz_answers)
+            
+            # Simpan hasil
+            result = submit_quiz_result(
+                quiz.get("id"),
+                st.session_state.current_user.get("id"),
+                st.session_state.quiz_answers,
+                score,
+                len(questions)
+            )
+            
+            # Tampilkan hasil
+            show_quiz_results(quiz, result, detailed_results)
+            
+            # Reset state
+            st.session_state.quiz_started = False
+            st.session_state.current_quiz = None
+            st.session_state.quiz_answers = {}
+
+def show_quiz_results(quiz, result, detailed_results):
+    """Menampilkan hasil kuis"""
+    st.markdown("""
+    <div class='electric-card'>
+        <h2>📊 Hasil Kuis</h2>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.metric("Skor", f"{result.get('score')}/{result.get('total_questions')}")
+    with col2:
+        st.metric("Persentase", f"{result.get('percentage')}%")
+    with col3:
+        st.metric("Attempt", f"{result.get('attempt_number')}")
+    
+    # Tampilkan detail per soal
+    st.subheader("📋 Detail Jawaban")
+    
+    for i, detail in enumerate(detailed_results):
+        question_class = "correct-answer" if detail.get("is_correct") else "wrong-answer"
+        
+        st.markdown(f"""
+        <div class='question-card {question_class}'>
+            <h4>Soal {i+1}: {detail.get('question')}</h4>
+            <p><strong>Jawaban Anda:</strong> {detail.get('user_answer')}</p>
+            <p><strong>Jawaban Benar:</strong> {detail.get('correct_answer')}</p>
+            <p><strong>Status:</strong> {'✅ Benar' if detail.get('is_correct') else '❌ Salah'}</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Feedback berdasarkan persentase
+    if result.get('percentage') >= 80:
+        st.success("🎉 Excellent! Pemahaman Anda sangat baik tentang materi ini.")
+    elif result.get('percentage') >= 60:
+        st.warning("👍 Good! Pemahaman Anda cukup baik, namun masih perlu diperdalam.")
+    else:
+        st.error("💡 Perlu belajar lagi. Silakan pelajari kembali materi modul ini.")
+
+def show_quiz_results_detail(quiz, user_attempts):
+    """Menampilkan detail hasil kuis"""
+    st.subheader(f"📊 Riwayat Attempt Kuis: {quiz.get('title')}")
+    
+    for attempt in user_attempts:
+        with st.expander(f"Attempt {attempt.get('attempt_number')} - {attempt.get('percentage')}% - {attempt.get('submitted_at')[:16]}"):
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.write(f"**Skor:** {attempt.get('score')}/{attempt.get('total_questions')}")
+            with col2:
+                st.write(f"**Persentase:** {attempt.get('percentage')}%")
+            with col3:
+                st.write(f"**Waktu:** {attempt.get('submitted_at')[:16]}")
+            
+            # Tampilkan jawaban untuk attempt ini
+            if st.button(f"Lihat Detail Jawaban Attempt {attempt.get('attempt_number')}", 
+                        key=f"detail_{attempt.get('id')}"):
+                show_attempt_details(quiz, attempt)
+
+def show_attempt_details(quiz, attempt):
+    """Menampilkan detail jawaban untuk attempt tertentu"""
+    questions = quiz.get("questions", [])
+    user_answers = attempt.get("answers", {})
+    
+    st.subheader(f"📝 Detail Jawaban - Attempt {attempt.get('attempt_number')}")
+    
+    for i, question in enumerate(questions):
+        user_answer = user_answers.get(f"q_{i}")
+        correct_answer = question.get("correct_answer")
+        is_correct = user_answer == correct_answer
+        
+        question_class = "correct-answer" if is_correct else "wrong-answer"
+        
+        st.markdown(f"""
+        <div class='question-card {question_class}'>
+            <h4>Soal {i+1}: {question.get('question')}</h4>
+            <p><strong>Jawaban Anda:</strong> {user_answer}</p>
+            <p><strong>Jawaban Benar:</strong> {correct_answer}</p>
+            <p><strong>Status:</strong> {'✅ Benar' if is_correct else '❌ Salah'}</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+# ===================== Manage Quizzes (Admin) ===================== #
+def show_manage_quizzes():
+    """Halaman untuk mengelola kuis (admin)"""
+    inject_custom_css()
+    
+    st.markdown("""
+    <div class='main-header'>
+        <h1>📝 Kelola Kuis</h1>
+        <p>Buat dan kelola kuis untuk setiap modul pembelajaran</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    courses = load_data(COURSES_FILE)
+    if not courses:
+        st.warning("Belum ada kursus yang tersedia.")
+        return
+    
+    course = courses[0]  # Ambil course pertama
+    course_id = course.get("id")
+    
+    tab1, tab2, tab3 = st.tabs(["➕ Buat Kuis Baru", "📋 Daftar Kuis", "📊 Lihat Hasil Kuis"])
+    
+    with tab1:
+        show_create_quiz_form(course_id)
+    
+    with tab2:
+        show_quizzes_list(course_id)
+    
+    with tab3:
+        show_quiz_results_admin(course_id)
+
+def show_create_quiz_form(course_id):
+    """Form untuk membuat kuis baru"""
+    st.subheader("➕ Buat Kuis Baru")
+    
+    module_id = st.selectbox("Pilih Modul", range(1, 8), format_func=lambda x: f"Modul {x}")
+    quiz_type = st.selectbox("Tipe Kuis", ["pre-test", "post-test", "formative", "summative"])
+    title = st.text_input("Judul Kuis")
+    description = st.text_area("Deskripsi Kuis")
+    max_attempts = st.number_input("Maksimal Attempt", min_value=1, max_value=10, value=1)
+    time_limit = st.number_input("Batas Waktu (menit, opsional)", min_value=0, value=0)
+    
+    st.subheader("📝 Soal-soal Kuis")
+    
+    questions = []
+    
+    # Input untuk beberapa soal
+    num_questions = st.number_input("Jumlah Soal", min_value=1, max_value=20, value=5)
+    
+    for i in range(num_questions):
+        st.markdown(f"### Soal {i+1}")
+        
+        question_text = st.text_input(f"Pertanyaan {i+1}", key=f"q_{i}_text")
+        
+        # Input untuk opsi jawaban
+        num_options = st.number_input(f"Jumlah Opsi Jawaban {i+1}", min_value=2, max_value=5, value=4, key=f"q_{i}_options")
+        
+        options = []
+        for j in range(num_options):
+            option = st.text_input(f"Opsi {j+1}", key=f"q_{i}_opt_{j}")
+            if option:
+                options.append(option)
+        
+        # Pilih jawaban benar
+        if options:
+            correct_answer = st.selectbox(f"Jawaban Benar untuk Soal {i+1}", options, key=f"q_{i}_correct")
+        else:
+            correct_answer = None
+            st.warning("Harap isi semua opsi jawaban")
+        
+        if question_text and options and correct_answer:
+            questions.append({
+                "question": question_text,
+                "options": options,
+                "correct_answer": correct_answer
+            })
+        
+        st.markdown("---")
+    
+    if st.button("💾 Buat Kuis", use_container_width=True):
+        if not title or not description:
+            st.error("Judul dan deskripsi kuis harus diisi!")
+            return
+        
+        if len(questions) == 0:
+            st.error("Harap tambahkan setidaknya satu soal!")
+            return
+        
+        quiz = create_quiz(course_id, module_id, title, description, questions, quiz_type, 
+                          time_limit if time_limit > 0 else None, max_attempts)
+        
+        st.success(f"✅ Kuis '{title}' berhasil dibuat!")
+        st.balloons()
+
+def show_quizzes_list(course_id):
+    """Menampilkan daftar kuis"""
+    st.subheader("📋 Daftar Kuis")
+    
+    quizzes = get_quizzes(course_id)
+    
+    if not quizzes:
+        st.info("Belum ada kuis untuk kursus ini.")
+        return
+    
+    for quiz in quizzes:
+        with st.expander(f"🧠 Modul {quiz.get('module_id')}: {quiz.get('title')} ({quiz.get('quiz_type')})"):
+            col1, col2 = st.columns([3, 1])
+            
+            with col1:
+                st.write(f"**Deskripsi:** {quiz.get('description')}")
+                st.write(f"**Jumlah Soal:** {len(quiz.get('questions', []))}")
+                st.write(f"**Batas Attempt:** {quiz.get('max_attempts', 1)}")
+                
+                if quiz.get('time_limit'):
+                    st.write(f"**Batas Waktu:** {quiz.get('time_limit')} menit")
+                
+                # Statistik kuis
+                results = get_quiz_results(quiz.get("id"))
+                if results:
+                    avg_score = sum(r.get("percentage", 0) for r in results) / len(results)
+                    st.write(f"**Rata-rata Nilai:** {avg_score:.1f}%")
+                    st.write(f"**Total Attempt:** {len(results)}")
+            
+            with col2:
+                if st.button("🗑️ Hapus", key=f"delete_quiz_{quiz.get('id')}"):
+                    quizzes_data = load_data(QUIZZES_FILE)
+                    for i, q in enumerate(quizzes_data):
+                        if q.get("id") == quiz.get("id"):
+                            quizzes_data[i]["is_active"] = False
+                            break
+                    save_data(quizzes_data, QUIZZES_FILE)
+                    st.success("✅ Kuis berhasil dihapus!")
+                    st.rerun()
+                
+                if st.button("✏️ Edit", key=f"edit_quiz_{quiz.get('id')}"):
+                    st.info("Fitur edit kuis akan segera tersedia.")
+
+def show_quiz_results_admin(course_id):
+    """Menampilkan hasil kuis untuk admin"""
+    st.subheader("📊 Hasil Kuis Siswa")
+    
+    quizzes = get_quizzes(course_id)
+    users = load_data(USERS_FILE)
+    students = [u for u in users if u.get("role") == "student"]
+    
+    if not quizzes:
+        st.info("Belum ada kuis untuk kursus ini.")
+        return
+    
+    selected_quiz = st.selectbox(
+        "Pilih Kuis",
+        quizzes,
+        format_func=lambda q: f"Modul {q.get('module_id')}: {q.get('title')} ({q.get('quiz_type')})"
+    )
+    
+    if selected_quiz:
+        results = get_quiz_results(selected_quiz.get("id"))
+        
+        if not results:
+            st.info("Belum ada hasil kuis untuk kuis ini.")
+            return
+        
+        # Statistik umum
+        st.subheader("📈 Statistik Kuis")
+        col1, col2, col3, col4 = st.columns(4)
+        
+        with col1:
+            avg_score = sum(r.get("percentage", 0) for r in results) / len(results)
+            st.metric("Rata-rata Nilai", f"{avg_score:.1f}%")
+        with col2:
+            max_score = max(r.get("percentage", 0) for r in results)
+            st.metric("Nilai Tertinggi", f"{max_score}%")
+        with col3:
+            min_score = min(r.get("percentage", 0) for r in results)
+            st.metric("Nilai Terendah", f"{min_score}%")
+        with col4:
+            st.metric("Total Attempt", len(results))
+        
+        # Tabel hasil
+        st.subheader("📋 Detail Hasil per Siswa")
+        
+        for result in results:
+            student = next((s for s in students if s.get("id") == result.get("user_id")), None)
+            if student:
+                with st.expander(f"🎓 {student.get('name')} - Attempt {result.get('attempt_number')} - {result.get('percentage')}%"):
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        st.write(f"**Nama:** {student.get('name')}")
+                        st.write(f"**Username:** {student.get('username')}")
+                        st.write(f"**Skor:** {result.get('score')}/{result.get('total_questions')}")
+                    with col2:
+                        st.write(f"**Persentase:** {result.get('percentage')}%")
+                        st.write(f"**Attempt:** {result.get('attempt_number')}")
+                        st.write(f"**Waktu Submit:** {result.get('submitted_at')[:16]}")
+                    
+                    if st.button(f"Lihat Detail Jawaban", key=f"view_{result.get('id')}"):
+                        show_attempt_details_admin(selected_quiz, result, student)
+
+def show_attempt_details_admin(quiz, result, student):
+    """Menampilkan detail jawaban untuk admin"""
+    questions = quiz.get("questions", [])
+    user_answers = result.get("answers", {})
+    
+    st.subheader(f"📝 Detail Jawaban - {student.get('name')}")
+    
+    for i, question in enumerate(questions):
+        user_answer = user_answers.get(f"q_{i}")
+        correct_answer = question.get("correct_answer")
+        is_correct = user_answer == correct_answer
+        
+        question_class = "correct-answer" if is_correct else "wrong-answer"
+        
+        st.markdown(f"""
+        <div class='question-card {question_class}'>
+            <h4>Soal {i+1}: {question.get('question')}</h4>
+            <p><strong>Jawaban Siswa:</strong> {user_answer}</p>
+            <p><strong>Jawaban Benar:</strong> {correct_answer}</p>
+            <p><strong>Status:</strong> {'✅ Benar' if is_correct else '❌ Salah'}</p>
+        </div>
+        """, unsafe_allow_html=True)
+
 # ===================== Assignment System ===================== #
 def create_assignment(course_id, module_id, title, description, due_date, max_points=100, file_types=None):
     """Membuat tugas baru"""
@@ -751,72 +1518,123 @@ def get_assignment_by_id(assignment_id):
     return next((a for a in assignments if a.get("id") == assignment_id), None)
 
 def submit_assignment(assignment_id, user_id, file_data, file_name, file_type, notes=""):
-    """Mengumpulkan tugas"""
+    """Mengumpulkan tugas - VERSION IMPROVED"""
     submissions = load_data(SUBMISSIONS_FILE)
     
-    # Cek apakah sudah ada submission
-    existing_submission = next(
-        (s for s in submissions if s.get("assignment_id") == assignment_id and s.get("user_id") == user_id),
-        None
-    )
+    # Pastikan tipe data konsisten
+    assignment_id = int(assignment_id) if not isinstance(assignment_id, int) else assignment_id
+    user_id = int(user_id) if not isinstance(user_id, int) else user_id
     
-    if existing_submission:
-        # Update submission yang sudah ada
-        existing_submission.update({
-            "file_data": file_data,
-            "file_name": file_name,
-            "file_type": file_type,
-            "notes": notes,
-            "submitted_at": datetime.now().isoformat(),
-            "status": "submitted"
-        })
+    # Cari submission yang sudah ada
+    existing_index = None
+    for i, sub in enumerate(submissions):
+        sub_assignment_id = sub.get("assignment_id")
+        sub_user_id = sub.get("user_id")
+        
+        # Normalize types untuk comparison
+        if isinstance(sub_assignment_id, str):
+            try:
+                sub_assignment_id = int(sub_assignment_id)
+            except:
+                pass
+                
+        if isinstance(sub_user_id, str):
+            try:
+                sub_user_id = int(sub_user_id)
+            except:
+                pass
+        
+        if sub_assignment_id == assignment_id and sub_user_id == user_id:
+            existing_index = i
+            break
+    
+    # Prepare file data
+    if isinstance(file_data, bytes):
+        file_data_encoded = base64.b64encode(file_data).decode('utf-8')
     else:
-        # Buat submission baru
+        file_data_encoded = file_data
+    
+    # Prepare submission data
+    submission_data = {
+        "file_data": file_data_encoded,
+        "file_name": file_name,
+        "file_type": file_type,
+        "file_size": len(file_data) if isinstance(file_data, bytes) else len(file_data_encoded),
+        "notes": notes,
+        "submission_text": notes,
+        "submitted_at": datetime.now().isoformat(),
+        "status": "submitted",
+        "is_graded": False,
+        "grade": None,
+        "feedback": None,
+        "graded_at": None,
+        "graded_by": None
+    }
+    
+    if existing_index is not None:
+        # Update existing submission
+        submissions[existing_index].update(submission_data)
+        st.info("🔄 Memperbarui submission yang sudah ada...")
+    else:
+        # Create new submission
         new_submission = {
             "id": len(submissions) + 1,
             "assignment_id": assignment_id,
-            "user_id": user_id,
-            "file_data": file_data,
-            "file_name": file_name,
-            "file_type": file_type,
-            "notes": notes,
-            "submitted_at": datetime.now().isoformat(),
-            "status": "submitted",
-            "score": None,
-            "feedback": None,
-            "graded_at": None,
-            "graded_by": None
+            "user_id": user_id
         }
+        new_submission.update(submission_data)
         submissions.append(new_submission)
+        st.info("🆕 Membuat submission baru...")
     
-    save_data(submissions, SUBMISSIONS_FILE)
-    
-    # Notifikasi untuk admin
-    users = load_data(USERS_FILE)
-    student = next((u for u in users if u.get("id") == user_id), None)
-    assignment = get_assignment_by_id(assignment_id)
-    
-    if student and assignment:
-        admins = [u for u in users if u.get("role") == "admin"]
-        for admin in admins:
-            create_notification(
-                admin.get("id"),
-                "📤 Tugas Dikumpulkan",
-                f"{student.get('name')} mengumpulkan tugas: {assignment.get('title')}",
-                "info",
-                assignment.get("course_id"),
-                assignment.get("module_id")
-            )
-    
-    return True
+    # Save data dengan error handling
+    try:
+        save_data(submissions, SUBMISSIONS_FILE)
+        st.success("💾 Data berhasil disimpan!")
+        
+        # Notification
+        users = load_data(USERS_FILE)
+        student = next((u for u in users if u.get("id") == user_id), None)
+        assignment = get_assignment_by_id(assignment_id)
+        
+        if student and assignment:
+            admins = [u for u in users if u.get("role") == "admin"]
+            for admin in admins:
+                create_notification(
+                    admin.get("id"),
+                    "📤 Tugas Dikumpulkan",
+                    f"{student.get('name')} mengumpulkan tugas: {assignment.get('title')}",
+                    "info",
+                    assignment.get("course_id"),
+                    assignment.get("module_id")
+                )
+        
+        return True
+        
+    except Exception as e:
+        st.error(f"❌ Gagal menyimpan data: {str(e)}")
+        return False
 
 def get_submission(assignment_id, user_id):
-    """Mendapatkan submission user untuk tugas tertentu"""
+    """Mendapatkan submission user untuk tugas tertentu - SIMPLIFIED"""
     submissions = load_data(SUBMISSIONS_FILE)
-    return next(
-        (s for s in submissions if s.get("assignment_id") == assignment_id and s.get("user_id") == user_id),
-        None
-    )
+    
+    # Debug info
+    print(f"DEBUG get_submission: assignment_id={assignment_id}, user_id={user_id}")
+    print(f"DEBUG: Total submissions: {len(submissions)}")
+    
+    for submission in submissions:
+        sub_assignment_id = submission.get("assignment_id")
+        sub_user_id = submission.get("user_id")
+        
+        print(f"DEBUG: Checking submission - assignment_id={sub_assignment_id}, user_id={sub_user_id}")
+        
+        # Simple comparison - biarkan Python handle type conversion
+        if sub_assignment_id == assignment_id and sub_user_id == user_id:
+            print(f"DEBUG: MATCH FOUND!")
+            return submission
+    
+    print(f"DEBUG: NO MATCH FOUND")
+    return None
 
 def get_all_submissions(assignment_id=None, course_id=None):
     """Mendapatkan semua submission (untuk admin)"""
@@ -872,12 +1690,6 @@ def is_file_type_allowed(file_name, allowed_types):
     """Cek apakah tipe file diizinkan"""
     file_ext = get_file_extension(file_name)
     return file_ext in allowed_types
-
-def create_download_link(file_data, file_name, file_type):
-    """Membuat link download untuk file"""
-    b64 = base64.b64encode(file_data).decode()
-    href = f'<a href="data:{file_type};base64,{b64}" download="{file_name}">📥 Download {file_name}</a>'
-    return href
 
 # ===================== Notifikasi System ===================== #
 def create_notification(user_id, title, message, notification_type="info", course_id=None, module_id=None):
@@ -1112,6 +1924,7 @@ def create_hero_section():
             <p>✓ Simulasi Interaktif</p>
             <p>✓ Assessment Berbasis Projek</p>
             <p>✓ Forum Diskusi</p>
+            <p>✓ Kuis & Evaluasi</p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -1339,12 +2152,26 @@ def get_module_by_id(modules, mid):
             return m
     return None
 
-def render_module_content_enhanced(m):
+def render_module_content_enhanced(m, course_id, module_id):
     if not m:
         st.info("📝 Modul sedang dalam pengembangan...")
         return
         
     st.markdown(f"### 📚 {m.get('title','')}")
+    
+    # Tampilkan media ajar yang terkait dengan modul
+    media_list = get_media_by_module(course_id, module_id)
+    if media_list:
+        st.markdown("""
+        <div class='custom-card'>
+            <h4>📁 Media Pembelajaran</h4>
+            <p>Berikut adalah bahan ajar yang tersedia untuk modul ini:</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        for media in media_list:
+            with st.expander(f"{get_file_icon(media.get('file_type'))} {media.get('file_name')} - {media.get('media_type').replace('_', ' ').title()}"):
+                display_media_content(media)
     
     if m.get("content"):
         st.markdown("""
@@ -1365,22 +2192,8 @@ def render_module_content_enhanced(m):
         except Exception:
             st.markdown(f"[📹 Tonton Video Pembelajaran]({m.get('video_url')})")
     
-    if m.get("quiz_url"):
-        st.markdown("""
-        <div class='custom-card'>
-            <h4>🔍 Evaluasi Pembelajaran</h4>
-        </div>
-        """, unsafe_allow_html=True)
-        st.markdown(f"**Quiz Modul:** [📝 Buka Quiz]({m.get('quiz_url')})")
-    
-    if m.get("files"):
-        st.markdown("""
-        <div class='custom-card'>
-            <h4>📂 Materi Pendukung</h4>
-        </div>
-        """, unsafe_allow_html=True)
-        for f in m["files"]:
-            st.markdown(f"• 📎 [{f.get('title','File')}]({f.get('url')})")
+    # Tampilkan kuis untuk modul ini
+    show_quiz_ui(1, m.get("id"))  # course_id 1
 
 # ===================== Forum UI ===================== #
 def module_forum_ui(course_id, module_id):
@@ -1419,6 +2232,11 @@ def show_my_courses():
         <p>Hukum Kirchhoff - Listrik Dinamis | Kurikulum Merdeka</p>
     </div>
     """, unsafe_allow_html=True)
+    
+    # Cek jika sedang mengerjakan kuis
+    if hasattr(st.session_state, 'quiz_started') and st.session_state.quiz_started:
+        show_quiz_interface()
+        return
     
     courses = load_data(COURSES_FILE)
     uid = st.session_state.current_user.get("id")
@@ -1569,7 +2387,7 @@ def show_course_detail_enhanced(course, user_prog=None):
         
         if m:
             with st.expander(f"📖 Buka Modul {mid}", expanded=False):
-                render_module_content_enhanced(m)
+                render_module_content_enhanced(m, course.get("id"), mid)
                 
                 # Tampilkan tugas untuk modul ini
                 show_assignment_ui(course.get("id"), mid)
@@ -1641,7 +2459,7 @@ def show_course_detail_enhanced(course, user_prog=None):
 
 # ===================== Assignment UI ===================== #
 def show_assignment_ui(course_id, module_id):
-    """Menampilkan UI untuk tugas"""
+    """Menampilkan UI untuk tugas - DENGAN PERBAIKAN TOMBOL KUMPULKAN ULANG"""
     st.subheader("📝 Tugas Modul")
     
     assignments = get_assignments(course_id, module_id)
@@ -1652,79 +2470,421 @@ def show_assignment_ui(course_id, module_id):
         return
     
     for assignment in assignments:
+        # Inisialisasi state dengan key yang lebih unik
+        form_key = f"show_form_{assignment.get('id')}_{current_user.get('id')}_{module_id}"
+        detail_key = f"show_detail_{assignment.get('id')}_{current_user.get('id')}_{module_id}"
+        resubmit_key = f"resubmit_{assignment.get('id')}_{current_user.get('id')}_{module_id}"
+        
+        # Inisialisasi state jika belum ada
+        if form_key not in st.session_state:
+            st.session_state[form_key] = False
+        if detail_key not in st.session_state:
+            st.session_state[detail_key] = False
+        
         with st.expander(f"📋 {assignment.get('title')}", expanded=True):
             st.write(f"**Deskripsi:** {assignment.get('description')}")
             st.write(f"**Batas Waktu:** {assignment.get('due_date')[:10]}")
             st.write(f"**Nilai Maksimal:** {assignment.get('max_points')} poin")
             
-            # Tampilkan status pengumpulan
+            # Get submission untuk user yang sedang login
             submission = get_submission(assignment.get("id"), current_user.get("id"))
             
             if submission:
-                st.success("✅ Tugas telah dikumpulkan")
+                # Status penilaian
+                score = submission.get('grade')
+                max_score = assignment.get('max_points', 100)
+                
+                is_graded = (
+                    submission.get("status") == "graded" or 
+                    submission.get("is_graded") is True or
+                    score is not None
+                )
+                
+                if is_graded and score is not None:
+                    st.success("🎉 **TUGAS TELAH DINILAI**")
+                    
+                    try:
+                        percentage = (score / max_score) * 100 if max_score and max_score > 0 else 0
+                    except (TypeError, ZeroDivisionError):
+                        percentage = 0
+                    
+                    col1, col2, col3 = st.columns(3)
+                    with col1:
+                        st.metric(
+                            "Nilai Anda", 
+                            f"{score}/{max_score}",
+                            f"{percentage:.1f}%"
+                        )
+                    with col2:
+                        status_text = "Lulus" if score >= (max_score * 0.6) else "Perlu Perbaikan"
+                        status_icon = "✅" if score >= (max_score * 0.6) else "⚠️"
+                        st.metric("Status", f"{status_icon} {status_text}")
+                    with col3:
+                        graded_by = submission.get('graded_by', 'Guru')
+                        st.metric("Dinilai Oleh", graded_by)
+                    
+                else:
+                    st.success("✅ **TUGAS TELAH DIKUMPULKAN**")
+                    st.info("⏳ Menunggu penilaian dari guru...")
+                
                 st.write(f"**Waktu Pengumpulan:** {submission.get('submitted_at')[:16]}")
-                st.write(f"**Status:** {submission.get('status').title()}")
+                st.write(f"**File:** {submission.get('file_name')}")
                 
-                if submission.get("status") == "graded":
-                    st.write(f"**Nilai:** {submission.get('score')}/{assignment.get('max_points')}")
-                    st.write(f"**Feedback:** {submission.get('feedback')}")
+                # Tombol aksi - PERBAIKAN LOGIC DI SINI
+                col1, col2 = st.columns([1, 1])
                 
-                # Tombol download file yang dikumpulkan
-                if submission.get("file_data"):
-                    st.markdown(create_download_link(
-                        base64.b64decode(submission.get("file_data")),
-                        submission.get("file_name"),
-                        submission.get("file_type")
-                    ), unsafe_allow_html=True)
+                with col1:
+                    # Tombol lihat detail
+                    if st.button("📋 Lihat Detail", 
+                               key=f"view_{assignment.get('id')}_{current_user.get('id')}_{module_id}",
+                               use_container_width=True):
+                        st.session_state[detail_key] = True
+                        st.rerun()
                 
-                # Tombol untuk mengumpulkan ulang
-                if st.button("🔄 Kumpulkan Ulang", key=f"resubmit_{assignment.get('id')}"):
-                    show_submission_form(assignment)
+                with col2:
+                    # Tombol kumpulkan ulang - SELALU TAMPILKAN
+                    if st.button("🔄 Kumpulkan Ulang", 
+                               key=f"resubmit_{assignment.get('id')}_{current_user.get('id')}_{module_id}",
+                               use_container_width=True):
+                        st.session_state[form_key] = True
+                        st.rerun()
+                
+                # Tampilkan detail jika diminta
+                if st.session_state[detail_key]:
+                    show_submission_detail(assignment, submission, detail_key)
+                    
             else:
-                st.warning("❌ Tugas belum dikumpulkan")
-                if st.button("📤 Kumpulkan Tugas", key=f"submit_{assignment.get('id')}"):
-                    show_submission_form(assignment)
+                st.warning("❌ **TUGAS BELUM DIKUMPULKAN**")
+                
+                # Tombol kumpulkan tugas pertama kali
+                if st.button("📤 Kumpulkan Tugas", 
+                           key=f"submit_{assignment.get('id')}_{current_user.get('id')}_{module_id}",
+                           use_container_width=True):
+                    st.session_state[form_key] = True
+                    st.rerun()
+            
+            # Tampilkan form pengumpulan jika state aktif
+            if st.session_state[form_key]:
+                show_submission_form(assignment, form_key, course_id, module_id)
 
-def show_submission_form(assignment):
-    """Form untuk mengumpulkan tugas"""
-    st.subheader(f"📤 Kumpulkan Tugas: {assignment.get('title')}")
+def debug_all_users():
+    """Debug semua user yang terdaftar"""
+    users = load_data(USERS_FILE)
     
-    uploaded_file = st.file_uploader(
-        "Pilih file tugas",
-        type=[ext.replace(".", "") for ext in assignment.get("file_types", [".pdf", ".doc", ".docx", ".jpg", ".png"])],
-        key=f"file_{assignment.get('id')}"
+    st.markdown("---")
+    st.subheader("👥 DEBUG ALL USERS")
+    
+    for user in users:
+        with st.expander(f"User {user.get('id')}: {user.get('name')} ({user.get('username')})"):
+            st.write(f"**ID:** {user.get('id')}")
+            st.write(f"**Username:** {user.get('username')}")
+            st.write(f"**Name:** {user.get('name')}")
+            st.write(f"**Email:** {user.get('email')}")
+            st.write(f"**Role:** {user.get('role')}")
+            st.write(f"**Enrolled Courses:** {user.get('enrolled_courses', [])}")
+
+def debug_all_submissions():
+    """Debug semua data submissions"""
+    submissions = load_data(SUBMISSIONS_FILE)
+    
+    st.markdown("---")
+    st.subheader("🐛 DEBUG ALL SUBMISSIONS")
+    st.write(f"Total submissions dalam database: {len(submissions)}")
+    
+    if not submissions:
+        st.info("Tidak ada data submissions")
+        return
+    
+    for i, sub in enumerate(submissions):
+        with st.expander(f"Submission {i+1} - ID: {sub.get('id')}", expanded=False):
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                st.write("**Data:**")
+                st.write(f"assignment_id: `{sub.get('assignment_id')}`")
+                st.write(f"user_id: `{sub.get('user_id')}`")
+                st.write(f"file_name: `{sub.get('file_name')}`")
+                st.write(f"status: `{sub.get('status')}`")
+                st.write(f"is_graded: `{sub.get('is_graded')}`")
+            
+            with col2:
+                st.write("**Types:**")
+                st.write(f"assignment_id type: `{type(sub.get('assignment_id'))}`")
+                st.write(f"user_id type: `{type(sub.get('user_id'))}`")
+                st.write(f"submitted_at: `{sub.get('submitted_at')}`")
+                    
+def debug_submissions():
+    """Fungsi untuk debug data submissions"""
+    submissions = load_data(SUBMISSIONS_FILE)
+    st.write("🔍 **DEBUG SUBMISSIONS DATA:**")
+    st.write(f"Total submissions: {len(submissions)}")
+    
+    for i, sub in enumerate(submissions):
+        st.write(f"--- Submission {i+1} ---")
+        st.write(f"ID: {sub.get('id')}")
+        st.write(f"Assignment ID: {sub.get('assignment_id')} (type: {type(sub.get('assignment_id'))})")
+        st.write(f"User ID: {sub.get('user_id')} (type: {type(sub.get('user_id'))})")
+        st.write(f"File Name: {sub.get('file_name')}")
+        st.write(f"Submitted At: {sub.get('submitted_at')}")
+        st.write(f"Status: {sub.get('status')}")
+        st.write(f"Is Graded: {sub.get('is_graded')}")
+        
+def debug_submission_data(assignment_id, user_id):
+    """Debug function untuk melihat data submission sebenarnya"""
+    submissions = load_data(SUBMISSIONS_FILE)
+    
+    st.markdown("---")
+    st.subheader("🔍 DEBUG INFO")
+    st.write(f"Mencari: assignment_id={assignment_id}, user_id={user_id}")
+    st.write(f"Tipe: assignment_id={type(assignment_id)}, user_id={type(user_id)}")
+    
+    st.write("**Semua Data di submissions.json:**")
+    for i, sub in enumerate(submissions):
+        st.write(f"**Submission {i+1}:**")
+        st.write(f"  - assignment_id: {sub.get('assignment_id')} (tipe: {type(sub.get('assignment_id'))})")
+        st.write(f"  - user_id: {sub.get('user_id')} (tipe: {type(sub.get('user_id'))})")
+        st.write(f"  - file_name: {sub.get('file_name')}")
+        st.write(f"  - match: {sub.get('assignment_id') == assignment_id and sub.get('user_id') == user_id}")
+        st.write("---")
+
+def debug_current_user():
+    """Debug info untuk user yang sedang login"""
+    st.markdown("---")
+    st.subheader("👤 DEBUG CURRENT USER")
+    if st.session_state.authenticated:
+        user = st.session_state.current_user
+        st.write(f"**User ID:** {user.get('id')}")
+        st.write(f"**Username:** {user.get('username')}")
+        st.write(f"**Name:** {user.get('name')}")
+        st.write(f"**Role:** {user.get('role')}")
+    else:
+        st.write("❌ Tidak ada user yang login")
+
+def show_submission_form(assignment, form_key, course_id, module_id):
+    """Form untuk mengumpulkan tugas - DENGAN PERBAIKAN"""
+    st.markdown("---")
+    st.subheader(f"📤 Form Pengumpulan Tugas: {assignment.get('title')}")
+    
+    current_user = st.session_state.current_user
+    
+    # Konfirmasi user
+    st.info(f"👤 Anda akan mengumpulkan tugas sebagai: **{current_user.get('name')}**")
+    
+    # Gunakan form dengan key yang unique
+    with st.form(key=f"submit_form_{assignment.get('id')}_{current_user.get('id')}_{module_id}", clear_on_submit=False):
+        uploaded_file = st.file_uploader(
+            "Pilih file tugas *",
+            type=[ext.replace(".", "") for ext in assignment.get("file_types", [".pdf", ".doc", ".docx", ".jpg", ".png"])],
+            key=f"uploader_{assignment.get('id')}_{current_user.get('id')}_{module_id}"
+        )
+        
+        notes = st.text_area("Catatan (opsional)", 
+                           placeholder="Tambahkan catatan untuk pengajar...",
+                           key=f"notes_{assignment.get('id')}_{current_user.get('id')}_{module_id}")
+        
+        # Tampilkan konfirmasi sebelum submit
+        if uploaded_file:
+            st.success(f"✅ File siap diupload: **{uploaded_file.name}**")
+            st.info(f"📏 Ukuran file: {format_file_size(uploaded_file.size)}")
+        else:
+            st.warning("⚠️ Harap pilih file terlebih dahulu")
+        
+        col1, col2 = st.columns([3, 1])
+        with col1:
+            submitted = st.form_submit_button("✅ Kumpulkan Tugas", use_container_width=True)
+        with col2:
+            if st.form_submit_button("❌ Batal", use_container_width=True):
+                st.session_state[form_key] = False
+                st.rerun()
+        
+        if submitted:
+            if uploaded_file is None:
+                st.error("❌ Silakan pilih file terlebih dahulu.")
+                return
+            
+            try:
+                # Baca file
+                file_data = uploaded_file.getvalue()
+                file_name = uploaded_file.name
+                file_type = uploaded_file.type
+                
+                # Validasi tipe file
+                allowed_extensions = assignment.get("file_types", [".pdf", ".doc", ".docx", ".jpg", ".png"])
+                file_extension = os.path.splitext(file_name)[1].lower()
+                
+                if file_extension not in allowed_extensions:
+                    st.error(f"❌ Tipe file tidak diizinkan. File yang diizinkan: {', '.join(allowed_extensions)}")
+                    return
+                
+                # Validasi ukuran file (max 10MB)
+                max_size = 10 * 1024 * 1024  # 10MB
+                if len(file_data) > max_size:
+                    st.error(f"❌ File terlalu besar. Maksimal {format_file_size(max_size)}")
+                    return
+                
+                # Progress indicator
+                with st.spinner("🔄 Mengupload file..."):
+                    # Submit assignment
+                    success = submit_assignment(
+                        assignment.get("id"),
+                        current_user.get("id"),
+                        file_data,
+                        file_name,
+                        file_type,
+                        notes
+                    )
+                
+                if success:
+                    st.success("✅ Tugas berhasil dikumpulkan!")
+                    st.balloons()
+                    
+                    # Reset state
+                    st.session_state[form_key] = False
+                    
+                    # Delay dan refresh
+                    import time
+                    time.sleep(2)
+                    st.rerun()
+                else:
+                    st.error("❌ Gagal mengumpulkan tugas. Silakan coba lagi.")
+                    
+            except Exception as e:
+                st.error(f"❌ Error: {str(e)}")
+                st.info("💡 Jika error berlanjut, coba refresh halaman dan ulangi.")
+
+def show_submission_detail(assignment, submission, detail_key):
+    """Menampilkan detail lengkap submission termasuk nilai dan feedback"""
+    st.markdown("---")
+    
+    # CEK STATUS PENILAIAN YANG LEBIH AKURAT DENGAN ERROR HANDLING
+    score = submission.get('grade')
+    max_score = assignment.get('max_points', 100)
+    
+    is_graded = (
+        submission.get("status") == "graded" or 
+        submission.get("is_graded") is True or
+        score is not None
     )
     
-    notes = st.text_area("Catatan (opsional)", placeholder="Tambahkan catatan untuk pengajar...")
-    
-    if uploaded_file is not None:
-        # Validasi file
-        if not is_file_type_allowed(uploaded_file.name, assignment.get("file_types", [])):
-            st.error(f"❌ Tipe file tidak diizinkan. File yang diizinkan: {', '.join(assignment.get('file_types'))}")
-            return
+    if is_graded and score is not None:
+        st.subheader("📊 Detail Penilaian")
         
-        if st.button("✅ Kumpulkan Tugas", key=f"confirm_{assignment.get('id')}"):
-            # Baca file sebagai bytes
-            file_data = uploaded_file.getvalue()
-            file_name = uploaded_file.name
-            file_type = uploaded_file.type
+        # Fix: Pastikan kalkulasi persentase aman
+        try:
+            percentage = (score / max_score) * 100 if max_score and max_score > 0 else 0
+        except (TypeError, ZeroDivisionError):
+            percentage = 0
+        
+        # Card informasi penilaian
+        col1, col2 = st.columns([2, 1])
+        
+        with col1:
+            st.markdown("""
+            <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                        color: white; padding: 20px; border-radius: 10px; margin: 10px 0;'>
+                <h4>🎯 Informasi Penilaian</h4>
+            </div>
+            """, unsafe_allow_html=True)
             
-            # Submit tugas
-            success = submit_assignment(
-                assignment.get("id"),
-                st.session_state.current_user.get("id"),
-                base64.b64encode(file_data).decode(),  # Encode sebagai base64 untuk storage
-                file_name,
-                file_type,
-                notes
-            )
+            # Informasi dasar
+            st.write(f"**📋 Judul Tugas:** {assignment.get('title')}")
+            st.write(f"**📅 Waktu Pengumpulan:** {submission.get('submitted_at')[:16]}")
+            st.write(f"**📄 File yang Dikumpulkan:** {submission.get('file_name')}")
             
-            if success:
-                st.success("✅ Tugas berhasil dikumpulkan!")
-                st.rerun()
+            if submission.get('graded_at'):
+                st.write(f"**⏰ Waktu Penilaian:** {submission.get('graded_at')[:16]}")
+            if submission.get('graded_by'):
+                st.write(f"**👨‍🏫 Dinilai Oleh:** {submission.get('graded_by')}")
+            
+            # Status penilaian
+            st.write(f"**📊 Status Penilaian:** ✅ **Telah Dinilai**")
+        
+        with col2:
+            # Card nilai dengan error handling
+            try:
+                # Tentukan warna berdasarkan persentase
+                if percentage >= 80:
+                    color = "#2ecc71"  # Hijau
+                    emoji = "🎉"
+                    status = "Excellent"
+                elif percentage >= 70:
+                    color = "#27ae60"  # Hijau muda
+                    emoji = "👍"
+                    status = "Good"
+                elif percentage >= 60:
+                    color = "#f39c12"  # Orange
+                    emoji = "⚠️"
+                    status = "Fair"
+                else:
+                    color = "#e74c3c"  # Merah
+                    emoji = "💡"
+                    status = "Need Improvement"
+                
+                st.markdown(f"""
+                <div style='background: {color}; color: white; padding: 20px; border-radius: 10px; 
+                            text-align: center; margin: 10px 0;'>
+                    <h2>{emoji} {score}/{max_score}</h2>
+                    <h3>{percentage:.1f}%</h3>
+                    <p><strong>{status}</strong></p>
+                </div>
+                """, unsafe_allow_html=True)
+            except Exception as e:
+                st.error(f"Error menampilkan nilai: {e}")
+        
+        # Feedback dari guru
+        st.markdown("---")
+        st.subheader("💬 Feedback dari Guru")
+        
+        if submission.get('feedback'):
+            # Tampilkan feedback dalam card yang menarik
+            st.markdown(f"""
+            <div style='background: #f8f9fa; border-left: 5px solid #3498db; 
+                        padding: 15px; margin: 10px 0; border-radius: 5px;'>
+                <h4>📝 Komentar dan Masukan</h4>
+                <p style='font-size: 16px; line-height: 1.6;'>{submission.get('feedback')}</p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            # Tips berdasarkan nilai
+            st.markdown("#### 💡 Tips untuk Perbaikan")
+            if percentage >= 80:
+                st.success("**Kerja bagus!** Pertahankan kualitas pekerjaan Anda dan terus tingkatkan pemahaman konsep.")
+            elif percentage >= 70:
+                st.info("**Hasil baik!** Perhatikan detail kecil dan tingkatkan ketelitian dalam pengerjaan.")
+            elif percentage >= 60:
+                st.warning("**Perlu perhatian lebih.** Pelajari kembali materi dan konsultasikan kesulitan dengan guru.")
             else:
-                st.error("❌ Gagal mengumpulkan tugas")
-
+                st.error("**Perlu belajar lebih giat.** Disarankan untuk mengulang materi dan mengerjakan latihan tambahan.")
+        else:
+            st.info("📝 Guru belum memberikan feedback detail.")
+    
+    else:
+        # Tampilan untuk tugas yang belum dinilai
+        st.subheader("📋 Detail Pengumpulan")
+        st.info("✅ **Tugas Anda telah berhasil dikumpulkan!**")
+        st.write("📊 **Status:** ⏳ Sedang dalam proses penilaian oleh guru")
+        
+        st.write(f"**📋 Judul Tugas:** {assignment.get('title')}")
+        st.write(f"**📅 Waktu Pengumpulan:** {submission.get('submitted_at')[:16]}")
+        st.write(f"**📄 File:** {submission.get('file_name')}")
+        st.write(f"**📝 Status Sistem:** {submission.get('status', 'submitted').title()}")
+        
+        if submission.get('notes'):
+            st.markdown("---")
+            st.subheader("📌 Catatan dari Anda")
+            st.markdown(f"""
+            <div style='background: #fff3cd; border-left: 5px solid #ffc107; 
+                        padding: 15px; margin: 10px 0; border-radius: 5px;'>
+                <p style='font-size: 14px; line-height: 1.6;'>{submission.get('notes')}</p>
+            </div>
+            """, unsafe_allow_html=True)
+    
+    # Tombol tutup detail
+    col1, col2 = st.columns([3, 1])
+    with col2:
+        if st.button("❌ Tutup Detail", key=f"close_{detail_key}", use_container_width=True):
+            st.session_state[detail_key] = False
+            st.rerun()
 # ===================== Notifications Page ===================== #
 def show_notifications():
     inject_custom_css()
@@ -1817,6 +2977,144 @@ def show_profile():
         </div>
         """, unsafe_allow_html=True)
 
+# ===================== Admin Management - Media Ajar ===================== #
+def show_manage_media():
+    inject_custom_css()
+    
+    st.markdown("""
+    <div class='main-header'>
+        <h1>📁 Kelola Media Ajar</h1>
+        <p>Unggah dan kelola bahan ajar untuk setiap modul</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    courses = load_data(COURSES_FILE)
+    if not courses:
+        st.warning("Belum ada kursus yang tersedia.")
+        return
+    
+    course = courses[0]
+    course_id = course.get("id")
+    
+    tab1, tab2 = st.tabs(["📤 Unggah Media Baru", "📋 Kelola Media Terupload"])
+    
+    with tab1:
+        st.subheader("📤 Unggah Media Ajar Baru")
+        
+        module_id = st.selectbox("Pilih Modul", range(1, 8), format_func=lambda x: f"Modul {x}", key="media_module")
+        media_type = st.selectbox("Jenis Media", 
+                                 ["modul_ajar", "bahan_ajar", "lkpd", "media_pembelajaran", "lainnya"],
+                                 format_func=lambda x: x.replace("_", " ").title(),
+                                 key="media_type_select")
+        
+        uploaded_file = st.file_uploader(
+            "Pilih file media ajar",
+            type=["pdf", "doc", "docx", "ppt", "pptx", "jpg", "jpeg", "png", "gif", "mp4", "mp3", "wav", "zip"],
+            key="media_upload"
+        )
+        
+        description = st.text_area("Deskripsi Media", placeholder="Jelaskan tentang media ajar ini...", key="media_desc")
+        
+        if uploaded_file is not None:
+            st.info(f"File: {uploaded_file.name} | Ukuran: {format_file_size(uploaded_file.size)}")
+            
+            if st.button("💾 Upload Media", use_container_width=True, key="upload_media_btn"):
+                file_data = uploaded_file.read()
+                media = save_media_file(
+                    file_data,
+                    uploaded_file.name,
+                    uploaded_file.type,
+                    uploaded_file.size,
+                    media_type,
+                    description
+                )
+                
+                # Tambahkan media ke modul
+                add_media_to_module(course_id, module_id, media.get("id"))
+                
+                st.success(f"✅ Media '{uploaded_file.name}' berhasil diupload!")
+                st.balloons()
+    
+    with tab2:
+        st.subheader("📋 Media Ajar Terupload")
+        
+        module_id_filter = st.selectbox("Filter berdasarkan Modul", 
+                                       [None] + list(range(1, 8)), 
+                                       format_func=lambda x: "Semua Modul" if x is None else f"Modul {x}",
+                                       key="media_filter")
+        
+        media_list = load_data(MEDIA_FILE)
+        if module_id_filter:
+            # Filter media berdasarkan modul yang dipilih
+            media_in_module = get_media_by_module(course_id, module_id_filter)
+            media_ids_in_module = [m.get("id") for m in media_in_module]
+            media_list = [m for m in media_list if m.get("id") in media_ids_in_module]
+        
+        if not media_list:
+            st.info("Belum ada media ajar yang diupload.")
+            return
+        
+        # Inisialisasi session state untuk preview
+        if 'current_media_preview' not in st.session_state:
+            st.session_state.current_media_preview = None
+        
+        for i, media in enumerate(media_list):
+            # Cari modul yang memiliki media ini
+            modules_with_media = []
+            for mod_id in range(1, 8):
+                module_media = get_media_by_module(course_id, mod_id)
+                if any(m.get("id") == media.get("id") for m in module_media):
+                    modules_with_media.append(f"Modul {mod_id}")
+            
+            # Buat key yang unik untuk setiap media item
+            media_key = f"media_{media.get('id')}_{module_id_filter if module_id_filter else 'all'}"
+            
+            # Gunakan index dalam loop untuk membuat expander unik
+            with st.expander(f"{get_file_icon(media.get('file_type'))} {media.get('file_name')} - {media.get('media_type').replace('_', ' ').title()}"):
+                col1, col2 = st.columns([3, 1])
+                
+                with col1:
+                    st.write(f"**Jenis:** {media.get('media_type').replace('_', ' ').title()}")
+                    st.write(f"**Ukuran:** {format_file_size(media.get('file_size'))}")
+                    st.write(f"**Diupload:** {media.get('uploaded_at')[:16]}")
+                    st.write(f"**Modul:** {', '.join(modules_with_media) if modules_with_media else 'Tidak terpasang'}")
+                    
+                    if media.get("description"):
+                        st.write(f"**Deskripsi:** {media.get('description')}")
+                
+                with col2:
+                    # Tombol untuk menampilkan preview dengan key yang unik
+                    preview_key = f"preview_{media.get('id')}_{module_id_filter if module_id_filter else 'all'}_{i}"
+                    if st.button("👁️ Preview", key=preview_key):
+                        st.session_state.current_media_preview = media.get("id")
+                        st.rerun()
+                    
+                    # Tombol hapus dengan key yang unik
+                    delete_key = f"delete_{media.get('id')}_{module_id_filter if module_id_filter else 'all'}_{i}"
+                    if st.button("🗑️ Hapus", key=delete_key):
+                        # Hapus dari semua modul terlebih dahulu
+                        for mod_id in range(1, 8):
+                            remove_media_from_module(course_id, mod_id, media.get("id"))
+                        # Hapus file media
+                        delete_media_file(media.get("id"))
+                        st.success("✅ Media berhasil dihapus!")
+                        st.rerun()
+        
+        # Tampilkan preview media jika dipilih
+        if st.session_state.current_media_preview:
+            media_id = st.session_state.current_media_preview
+            media = get_media_by_id(media_id)
+            if media:
+                st.markdown("---")
+                st.subheader(f"👁️ Preview: {media.get('file_name')}")
+                
+                # Tombol untuk menutup preview
+                if st.button("❌ Tutup Preview", key="close_preview"):
+                    st.session_state.current_media_preview = None
+                    st.rerun()
+                
+                display_media_content(media)
+
 # ===================== Admin Management ===================== #
 def show_manage_students():
     inject_custom_css()
@@ -1886,44 +3184,51 @@ def show_manage_modules():
     
     modules = course.get("modules", [])
     
-    for mid in range(1, 8):
-        m = get_module_by_id(modules, mid)
-        with st.expander(f"Modul {mid}: {m.get('title') if m else 'Modul Baru'}", expanded=False):
-            title = st.text_input("Judul Modul", value=m.get("title") if m else f"Modul {mid} - Hukum Kirchhoff", key=f"title_{mid}")
-            content = st.text_area("Konten Materi", value=m.get("content") if m else f"Konten untuk modul {mid}...", key=f"content_{mid}", height=200)
-            video_url = st.text_input("URL Video", value=m.get("video_url") if m else "", key=f"video_{mid}")
-            quiz_url = st.text_input("URL Quiz", value=m.get("quiz_url") if m else "", key=f"quiz_{mid}")
-            
-            if st.button(f"💾 Simpan Modul {mid}", key=f"save_{mid}"):
-                new_module = {
-                    "id": mid,
-                    "title": title,
-                    "content": content
-                }
-                if video_url:
-                    new_module["video_url"] = video_url
-                if quiz_url:
-                    new_module["quiz_url"] = quiz_url
+    # Tab untuk mengelola modul dan media
+    tab1, tab2 = st.tabs(["✏️ Edit Konten Modul", "📁 Kelola Media Modul"])
+    
+    with tab1:
+        for mid in range(1, 8):
+            m = get_module_by_id(modules, mid)
+            with st.expander(f"Modul {mid}: {m.get('title') if m else 'Modul Baru'}", expanded=False):
+                title = st.text_input("Judul Modul", value=m.get("title") if m else f"Modul {mid} - Hukum Kirchhoff", key=f"title_{mid}")
+                content = st.text_area("Konten Materi", value=m.get("content") if m else f"Konten untuk modul {mid}...", key=f"content_{mid}", height=200)
+                video_url = st.text_input("URL Video", value=m.get("video_url") if m else "", key=f"video_{mid}")
+                quiz_url = st.text_input("URL Quiz", value=m.get("quiz_url") if m else "", key=f"quiz_{mid}")
                 
-                # Update atau tambah modul
-                module_exists = False
-                for i, module in enumerate(modules):
-                    if module.get("id") == mid:
-                        modules[i] = new_module
-                        module_exists = True
-                        break
-                
-                if not module_exists:
-                    modules.append(new_module)
-                
-                course["modules"] = modules
-                for i, c in enumerate(courses):
-                    if c.get("id") == course.get("id"):
-                        courses[i] = course
-                save_data(courses, COURSES_FILE)
-                
-                st.success(f"✅ Modul {mid} berhasil disimpan!")
-                st.rerun()
+                if st.button(f"💾 Simpan Modul {mid}", key=f"save_{mid}"):
+                    new_module = {
+                        "id": mid,
+                        "title": title,
+                        "content": content
+                    }
+                    if video_url:
+                        new_module["video_url"] = video_url
+                    if quiz_url:
+                        new_module["quiz_url"] = quiz_url
+                    
+                    # Update atau tambah modul
+                    module_exists = False
+                    for i, module in enumerate(modules):
+                        if module.get("id") == mid:
+                            modules[i] = new_module
+                            module_exists = True
+                            break
+                    
+                    if not module_exists:
+                        modules.append(new_module)
+                    
+                    course["modules"] = modules
+                    for i, c in enumerate(courses):
+                        if c.get("id") == course.get("id"):
+                            courses[i] = course
+                    save_data(courses, COURSES_FILE)
+                    
+                    st.success(f"✅ Modul {mid} berhasil disimpan!")
+                    st.rerun()
+    
+    with tab2:
+        show_manage_media()
 
 def show_manage_course_codes():
     inject_custom_css()
@@ -2170,36 +3475,45 @@ def show_manage_assignments():
                     
                     for submission in submissions:
                         student = next((u for u in users if u.get("id") == submission.get("user_id")), None)
-                        with st.expander(f"📄 {student.get('name') if student else 'Unknown'} - {submission.get('status').title()}"):
+                        
+                        # FIX: Handle None status dengan aman
+                        status = submission.get('status', 'unknown')
+                        status_display = status.title() if status else 'Unknown'
+                        
+                        with st.expander(f"📄 {student.get('name') if student else 'Unknown'} - {status_display}"):
                             col1, col2 = st.columns(2)
                             
                             with col1:
                                 st.write(f"**Nama:** {student.get('name') if student else 'Unknown'}")
-                                st.write(f"**Dikumpulkan:** {submission.get('submitted_at')[:16]}")
-                                st.write(f"**File:** {submission.get('file_name')}")
+                                st.write(f"**Dikumpulkan:** {submission.get('submitted_at', 'Unknown')[:16]}")
+                                st.write(f"**File:** {submission.get('file_name', 'Unknown')}")
                                 
-                                # Download link
+                                # Download link dengan error handling
                                 if submission.get("file_data"):
-                                    st.markdown(create_download_link(
-                                        base64.b64decode(submission.get("file_data")),
-                                        submission.get("file_name"),
-                                        submission.get("file_type")
-                                    ), unsafe_allow_html=True)
+                                    try:
+                                        st.markdown(create_download_link(
+                                            base64.b64decode(submission.get("file_data")),
+                                            submission.get("file_name", "file"),
+                                            submission.get("file_type", "application/octet-stream")
+                                        ), unsafe_allow_html=True)
+                                    except Exception as e:
+                                        st.error(f"Error membuat link download: {e}")
                                 
                                 if submission.get("notes"):
                                     st.write(f"**Catatan:** {submission.get('notes')}")
                             
                             with col2:
-                                if submission.get("status") == "submitted":
+                                if submission.get("status") == "submitted" or not submission.get("status"):
                                     score = st.number_input(
                                         "Nilai",
                                         min_value=0,
-                                        max_value=selected_assignment.get("max_points"),
-                                        value=0,
+                                        max_value=selected_assignment.get("max_points", 100),
+                                        value=submission.get('score', 0),
                                         key=f"score_{submission.get('id')}"
                                     )
                                     feedback = st.text_area(
                                         "Feedback",
+                                        value=submission.get('feedback', ''),
                                         placeholder="Berikan feedback untuk siswa...",
                                         key=f"feedback_{submission.get('id')}"
                                     )
@@ -2214,11 +3528,11 @@ def show_manage_assignments():
                                         st.success("✅ Nilai berhasil disimpan!")
                                         st.rerun()
                                 else:
-                                    st.write(f"**Nilai:** {submission.get('score')}/{selected_assignment.get('max_points')}")
-                                    st.write(f"**Feedback:** {submission.get('feedback')}")
-                                    st.write(f"**Dinilai oleh:** {submission.get('graded_by')}")
-                                    st.write(f"**Waktu Penilaian:** {submission.get('graded_at')[:16]}")
-
+                                    st.write(f"**Nilai:** {submission.get('score', 0)}/{selected_assignment.get('max_points', 100)}")
+                                    st.write(f"**Feedback:** {submission.get('feedback', 'Tidak ada feedback')}")
+                                    st.write(f"**Dinilai oleh:** {submission.get('graded_by', 'Unknown')}")
+                                    if submission.get('graded_at'):
+                                        st.write(f"**Waktu Penilaian:** {submission.get('graded_at')[:16]}")
 # ===================== Main Function ===================== #
 def main():
     init_data()
@@ -2227,6 +3541,14 @@ def main():
     if "authenticated" not in st.session_state:
         st.session_state.authenticated = False
         st.session_state.current_user = None
+    if "quiz_started" not in st.session_state:
+        st.session_state.quiz_started = False
+    if "current_quiz" not in st.session_state:
+        st.session_state.current_quiz = None
+    if "quiz_answers" not in st.session_state:
+        st.session_state.quiz_answers = {}
+    if "current_media_preview" not in st.session_state:
+        st.session_state.current_media_preview = None
 
     # Sidebar
     st.sidebar.markdown("""
@@ -2237,7 +3559,7 @@ def main():
     """, unsafe_allow_html=True)
     
     if st.session_state.authenticated:
-        user = st.session_state.current_user
+        user = st.session_state.current_user  # This line was missing indentation
         st.sidebar.markdown(f"""
         <div style='background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); color: white; padding: 15px; border-radius: 10px; margin: 10px 0;'>
             <h4>👋 Halo, {user.get('name')}!</h4>
@@ -2249,9 +3571,27 @@ def main():
         unread_count = get_unread_notification_count(user_id)
         notification_text = f"🔔 Notifikasi ({unread_count})" if unread_count > 0 else "🔔 Notifikasi"
         
+        if st.sidebar.button("🐛 Debug System", key="debug_system"):
+            st.sidebar.write("### Debug Info")
+            st.sidebar.write(f"User ID: {user.get('id')}")
+            st.sidebar.write(f"Username: {user.get('username')}")
+            
+            # Debug submissions
+            submissions = load_data(SUBMISSIONS_FILE)
+            st.sidebar.write(f"Total Submissions: {len(submissions)}")
+            
+            user_submissions = [s for s in submissions if s.get('user_id') == user.get('id')]
+            st.sidebar.write(f"Your Submissions: {len(user_submissions)}")
+            
+            # Tampilkan detail submissions user ini
+            if user_submissions:
+                st.sidebar.write("**Detail Submissions Anda:**")
+                for sub in user_submissions:
+                    st.sidebar.write(f"- Assignment {sub.get('assignment_id')}: {sub.get('file_name')}")
+        
         if user.get("role") == "admin":
             menu_options = ["Dashboard", "Materi Pembelajaran", "Laboratorium Virtual", notification_text, 
-                           "Kelola Siswa", "Kelola Modul", "Kelola Tugas", "Kelola Kode Akses", "Kirim Notifikasi", "Lihat Absensi", "Profil"]
+                           "Kelola Siswa", "Kelola Modul", "Kelola Tugas", "Kelola Kuis", "Kelola Kode Akses", "Kirim Notifikasi", "Lihat Absensi", "Profil"]
         else:
             menu_options = ["Dashboard", "Materi Pembelajaran", "Laboratorium Virtual", notification_text, "Profil"]
         
@@ -2260,6 +3600,10 @@ def main():
         if st.sidebar.button("🚪 Logout", use_container_width=True):
             st.session_state.authenticated = False
             st.session_state.current_user = None
+            st.session_state.quiz_started = False
+            st.session_state.current_quiz = None
+            st.session_state.quiz_answers = {}
+            st.session_state.current_media_preview = None
             st.rerun()
     else:
         selected_menu = None
@@ -2319,6 +3663,8 @@ def main():
             show_manage_modules()
         elif selected_menu == "Kelola Tugas" and st.session_state.current_user.get("role") == "admin":
             show_manage_assignments()
+        elif selected_menu == "Kelola Kuis" and st.session_state.current_user.get("role") == "admin":
+            show_manage_quizzes()
         elif selected_menu == "Kelola Kode Akses" and st.session_state.current_user.get("role") == "admin":
             show_manage_course_codes()
         elif selected_menu == "Kirim Notifikasi" and st.session_state.current_user.get("role") == "admin":

@@ -1,0 +1,79 @@
+[
+    {
+        "id": 1,
+        "title": "Hukum Kirchhoff - Dasar Teori dan Aplikasi",
+        "description": "Kursus ini membahas konsep Hukum Kirchhoff tentang tegangan dan arus dalam rangkaian listrik.",
+        "instructor": "Edo Anugrah",
+        "category": "Fisika - Kelistrikan",
+        "level": "SMA Kelas 12",
+        "created_at": "2025-10-03T12:58:08.388646",
+        "modules": [
+            {
+                "id": 3,
+                "title": "Praktikum Hukum I Kirchhoff",
+                "content": "🎉 Selamat! Anda telah menyelesaikan tahap pemahaman konsep! 🎉\n\nAnda sudah menonton video dan mempelajari teori dasar Hukum Kirchhoff 1 (Hukum Arus). Sekarang, saatnya beralih dari teori ke aksi! 💥\n\nSeperti kata pepatah, \"Anda tidak benar-benar memahami sesuatu sampai Anda bisa mengaplikasikannya untuk memecahkan masalah.\" 🔧 Nah, inilah momen kebenarannya!\n\nPada halaman ini, Anda akan menemukan Lembar Kerja Peserta Didik (LKPD) yang telah dirancang khusus untuk melatih keterampilan Anda.\n\n📝 Lembar Kerja Peserta Didik (LKPD) Hukum Kirchhoff 1\nAyo Buktikan Bahwa Anda Bisa! 💪\n\n📋 Petunjuk Pengerjaan:\n1. 📥 Akses & Unduh: Klik link LKPD di atas untuk mengunduh dokumennya.\n2. 🖨️ Cetak & Siapkan: Cetak LKPD yang telah Anda unduh. Bekerja di atas kertas fisik akan membantumu lebih fokus!\n3. ✍️ Tunjukkan Proses Berpikirmu: Ini yang terpenting! Jangan hanya menulis jawaban akhir. Tunjukkan langkah pengerjaan Anda dengan jelas dan rapi untuk setiap soal. Ingat, langkah yang logis dan terstruktur adalah kunci dari pemecahan masalah yang baik dan akan memudahkan Anda dalam memeriksa ulang.\n\n🔥 Tantang dirimu sendiri, pahami setiap langkah, dan jadilah master Hukum Kirchhoff 1! 🔥\nSelamat Bekerja! Semangat! 🚀",
+                "media_ids": [
+                    7,
+                    8
+                ]
+            },
+            {
+                "id": 1,
+                "title": "Pengenalan Pembelajaran Materi Listrik Dinamis: Hukum Kirchhoff",
+                "content": "✨ Selamat datang, para ilmuwan muda kelas XII! ✨\n\n🤔 Apakah kalian pernah membayangkan...\n...bagaimana seorang insinyur elektronik merancang sebuah motherboard komputer yang sangat rumit? 🖥️\n...atau bagaimana seorang teknisi dapat menemukan kerusakan pada rangkaian listrik yang kompleks? 🔍\n\nRahasia di baliknya seringkali terletak pada penguasaan mereka terhadap sebuah hukum fundamental dalam fisika: ⚡ HUKUM KIRCHHOFF! ⚡\n\nDalam topik Listrik Dinamis ini, kita akan:\n🚀 Meninggalkan sejenak rangkaian seri dan paralel sederhana.\n🚀 Melangkah ke dunia yang lebih menantang sekaligus sangat menarik: Rangkaian Majemuk!\n\nDi sinilah Hukum Ohm saja tidak lagi cukup, dan di sinilah Hukum Kirchhoff menjadi \"pahlawan super\" 🦸 yang akan membimbing kita untuk menganalisis aliran arus dan tegangan di setiap sudut rangkaian!\n\n💡 Mengapa Materi Ini Penting untuk Kalian Pahami?\n🏛️ Landasan Ilmu Teknik: Hukum Kirchhoff adalah fondasi utama bagi kalian yang ingin melanjutkan studi di bidang teknik elektro, robotika, komputer, dan teknologi masa depan! 🤖\n🧠 Pemecahan Masalah yang Sistematis: Materi ini melatih logika dan skill problem-solving kalian dengan pendekatan yang sangat terstruktur. (Your brain will thank you later!)\n🌍 Menerjemahkan Teori ke Aplikasi Nyata: Dari menghitung daya pada sirkuit hingga memahami sistem kelistrikan pada kendaraan listrik 🚗, semuanya berawal dari pemahaman ini!\n\n🎯 Ayo, Mulai Perjalanan Belajar Kalian! 🎯\n\nUntuk memudahkan perjalanan belajar kalian, kami telah menyusun materi ini ke dalam dua bagian utama yang bisa kalian klik di bawah ini. \n\nSiap untuk petualangan baru? Let's go! 💪",
+                "video_url": "https://youtu.be/ALeDH_6qn5M?si=70CS97C7k-W9TzrC",
+                "media_ids": [
+                    1,
+                    2,
+                    3,
+                    4
+                ]
+            },
+            {
+                "id": 4,
+                "title": "Hukum II Kirchhoff",
+                "content": "🌟 Level Up! Saatnya Menguasai Hukum Kirchhoff 2! 🌟\nSelamat! Anda telah menguasai hukum yang mengatur perilaku arus listrik pada suatu titik. Hebat! 👏\n\nSekarang, kita akan melangkah ke hukum kedua yang akan menyempurnakan alat analisis kita. Jika Hukum Kirchhoff 1 (KCL) adalah tentang \"kekekalan muatan\" pada sebuah titik percabangan, maka Hukum Kirchhoff 2 (KVL) adalah tentang \"kekekalan energi\" dalam sebuah loop tertutup. 🔄\n\nBayangkan ini: KCL adalah aturan lalu lintas di sebuah persimpangan (simpul), sedangkan KVL adalah peta yang mencatat semua naik-turunnya \"bukit potensial\" (tegangan) dalam sebuah perjalanan keliling (loop). Bersama-sama, keduanya menjadi kombo super 🦸‍♂️ untuk memecahkan segala rangkaian listrik!\n\n🎬 Video Pembelajaran: Menguak Misteri Hukum Kirchhoff 2\nKonsep dalam Hukum Kirchhoff 2 bisa terasa lebih abstrak. Oleh karena itu, menonton video penjelasan ini dengan seksama adalah kunci pemahaman Anda!\n\n📝 Panduan Menonton: Kunci Sukses Menguasai KVL! 🔑\nIkuti arahan ini untuk memastikan Anda menyerap setiap detail penting dari video:\n\n🎯 Fokus Pada Hal-Hal Kritis Ini:\n1. ⚖️ Aturan Tanda adalah JANTUNGANNYA! Ini bagian paling penting. Perhatikan baik-baik perbedaan aturan tanda untuk GGL (Baterai - ε) 🪫 dan Tegangan Jepit pada Resistor (IR) 🔌.\n2. 🧭 Arah Loop & Arah Arus: Perhatikan bagaimana pilihan arah loop (searah atau berlawanan jarum jam) dan arah arus mempengaruhi tanda (+) dan (-) dalam persamaan Anda.\n3. 🔁 Konsep \"Loop Tertutup\": Pahami mengapa kita harus berjalan melingkar dan kembali ke titik awal, dan bagaimana total energinya nol.\n\n💡 Tips Ahli:\n1. ⏸️ Jangan Ragu Jeda Video! Setiap kali presenter menyelesaikan satu loop atau menuliskan sebuah persamaan, jeda video tersebut. Coba pahami logika di balik setiap langkah yang dilakukan sebelum melanjutkan.\n2. ✍️ Catat dengan Warna: Gunakan dua warna berbeda untuk mencatat aturan tanda GGL dan Resistor. Visual seperti ini sangat membantu mengingat!\n3. 🗣️ Ucapkan Kembali: Setelah menonton satu bagian, coba ucapkan dengan kata-kata sendiri konsep yang baru saja dijelaskan. Jika bisa menjelaskannya, berarti Anda benar-benar paham!\n\nBersiaplah untuk melengkapi toolkit fisika Anda! Pahami Hukum Kirchhoff 2, dan Anda akan memiliki kunci untuk membuka semua teka-teki rangkaian listrik yang lebih kompleks! 🔐\n\nSemangat belajar! 💥",
+                "video_url": "https://youtu.be/_hGdqDvstiQ?si=JjWP6v0fgRf1aeFf",
+                "media_ids": [
+                    9,
+                    10
+                ]
+            },
+            {
+                "id": 2,
+                "title": "Hukum I Kirchhoff",
+                "content": "🎉 Selamat datang di Jantung Pembelajaran Kita! 🎉\n\nSudah siap masuk ke bagian yang paling seru? 🔬 Jika sebelumnya kita melihat peta besarnya, sekarang saatnya kita menggali hukum pertama yang menjadi fondasi analisis rangkaian kompleks: Hukum Kirchhoff 1!\n\nJangan khawatir dengan namanya yang terdengar rumit! Hukum Arus Kirchhoff (Kirchhoff's Current Law - KCL) ini sebenarnya sangat intuitif dan konsepnya mirip dengan sesuatu yang kita alami sehari-hari, seperti aliran air atau kerumunan orang! 🤔➡️💡\n\n🎬 Video Pembelajaran: Rahasia di Balik Hukum Kirchhoff 1\nUntuk membantumu benar-benar paham, tontonlah video penjelasan berikut ini! Video ini akan menghidupkan konsep dengan animasi yang jelas.\n\n📝 Panduan Menonton \"Agar Jadi Jagoan Rangkaian!\" 💪\nJangan hanya ditonton, ya! Ikuti panduan ini untuk hasil belajar yang maksimal:\n\n✅ Sebelum Menonton:\n🛠️ Siapkan \"Senjata\": Buku catatan dan alat tulis favoritmu! Jangan lupa pensil warna untuk membedakan arus.\n🧠 Pasang Niat: \"Saya akan fokus menemukan jawaban dari teka-teki arus listrik!\"\n\n✅ Saat Menonton:\n👀 Fokus pada Dua Konsep Kunci:\nApa itu \"Simpul\" (Node)? ➡️ Titik pertemuan beberapa kabel, ibaratnya persimpangan jalan 🚦.\nBagaimana \"Arah Arus\" Ditentukan? ➡️ Ingat, ini seperti kesepakatan lalu lintas untuk arus!\n🤔 Pahami Logika Intinya: Mengapa ya, \"Total arus yang MASUK harus sama dengan total arus yang KELUAR\"? Coba tebak analoginya!\n⏸️ Jangan Sungkan untuk Jeda Video! Berhenti sejenak, cerna penjelasannya, dan tulis ulang dengan bahasamu sendiri. Ini kunci pemahaman!\n\n🚀 Langkah Selanjutnya: Dari Teori ke Aksi!\nSetelah menonton video dan merasa sudah \"Aha! Saya paham!\", saatnya menguji dan memperdalam pemahamanmu dengan contoh nyata!\n\n👉 Yuk, Lanjutkan Petualanganmu di Sini! 👇\n[https://www.slideshare.net/slideshow/hukum-kirchhoff-1-hukum-kirchhoff-arus-hukum-kirchhoff-2-hukum-kirchhoff-tegangan/271642369]\n\nSelamat belajar! Semangat menaklukkan Hukum Kirchhoff 1! 🚀",
+                "video_url": "https://youtu.be/C5_-_C52UtU?si=-MwgcZN3KNI2xhP2",
+                "media_ids": [
+                    5,
+                    6
+                ]
+            },
+            {
+                "id": 5,
+                "title": "Praktikum Hukum II Kirchhoff",
+                "content": "🚀 Tantangan Sesungguhnya Dimulai Sekarang! 🚀\nSelamat! Anda telah melengkapi \"kotak peralatan\" fisika Anda dengan kedua Hukum Kirchhoff yang powerful! ⚡\n\nIngat analoginya:\n1. Hukum Kirchhoff 1 (KCL) adalah \"polisi lalu lintas\" 🚦 yang mengatur arus di setiap persimpangan (simpul).\n2. Hukum Kirchhoff 2 (KVL) adalah \"peta penjelajah\" 🗺️ yang mencatat setiap naik-turun energi (tegangan) dalam perjalanan keliling (loop).\n\nNah, untuk menganalisis rangkaian majemuk yang sesungguhnya, Anda harus menjadi dirigen yang mahir memadukan kedua instrumen ini secara harmonis dan bersamaan! 👨‍🏫\n\n📘 Lembar Kerja Peserta Didik (LKPD) Hukum Kirchhoff 2\nLKPD pada halaman ini dirancang khusus untuk melatih Anda menerapkan Hukum Kirchhoff 2 secara spesifik, yang merupakan langkah kritis dalam menyelesaikan teka-teki rangkaian majemuk!\n\n🧭 Panduan Pengerjaan LKPD: Kunci Menaklukkan Soal!\nIkuti 3 Langkah Jitu ini untuk menyelesaikan LKPD dengan percaya diri:\n\n1. 📄 UNDUH & CETAK\nDownload LKPD di atas.\n🖨️ Cetak dokumennya! Bekerja di atas kertas fisik membantumu lebih fokus dan terorganisir.\n\n2. 🔍 BACA & IDENTIFIKASI (Langkah Penting Sebelum Menghitung!)\nBaca soal dengan teliti, jangan terburu-buru!\n\n3. ✍️ KERJAKAN & BUKTIKAN\nTunjukkan proses berpikir Anda dengan LANGKAH YANG JELAS DAN TERSTRUKTUR.\nIni bukan tentang jawaban akhir, tapi tentang membuktikan bahwa Anda memahami jalannya logika! 🧠\n\n💪 Anda sudah sampai di sini, sekarang waktunya buktikan kemampuan Anda!\nTekun, teliti, dan percaya diri! Anda pasti bisa! 🌟\n\nSelamat Berlatih, Calon Ilmuwan Hebat! 🎉",
+                "media_ids": [
+                    11,
+                    12
+                ]
+            },
+            {
+                "id": 6,
+                "title": "Latihan Soal",
+                "content": "🏆 Tantangan Puncak: Uji Pemahaman Menyeluruh Anda! 🏆\nTibalah saat yang menentukan! ✨\n\nAnda telah melalui perjalanan yang panjang:\n✅ Mempelajari teori mendalam\n✅ Menyimak video penjelasan\n✅ Berlatih dengan LKPD untuk masing-masing hukum\n\nSekarang, di halaman ak\nhir modul ini, Anda akan dihadapkan pada Latihan Soal Komprehensif yang sebenarnya! 🧠💥 Latihan ini dirancang khusus untuk mengukur kemampuan Anda dalam menerapkan Hukum Kirchhoff 1 dan 2 secara terpadu dalam berbagai bentuk soal.\n\n📝 Latihan Soal Komprehensif Hukum Kirchhoff 1 & 2\n\n📋 Petunjuk Pengerjaan: Kunci Kesuksesan Anda!\nIkuti 5 Langkah Penting ini dengan disiplin:\n\n1. 🔗 AKSES SOAL\nMasuk ke link berkas soal di atas.\n2. 💪 KERJAKAN SECARA MANDIRI\nIni adalah evaluasi untuk diri Anda sendiri! ✋\nKerjakan sendiri sejauh kemampuan Anda - ini untuk mengukur pemahaman sebenarnya.\n\n⭕ SOAL PILIHAN GANDA\nPilihlah jawaban yang paling tepat dengan memberikan tanda (X) pada pilihan A, B, C, D, atau E.\n\n📝 SOAL ESSAY\nTUNJUKKAN SEMUA LANGKAH PEKERJAAN secara jelas dan sistematis di kertas/buku catatan.\n\n🚫 Jawaban akhir tanpa langkah kerja TIDAK akan mendapat nilai penuh!\nIngat: Proses berpikir Anda lebih berharga daripada sekadar jawaban akhir!\n\n⏰ ALOKASI WAKTU: 45 MENIT\nKelola waktu dengan baik! Jangan terlalu lama di satu soal.\n\n🎉 SELAMAT MENGERJAKAN! 🎉\nTenang, fokus, dan percaya pada kemampuan yang telah Anda bangun selama ini. Anda pasti bisa! 💫\n\n🏁 Selamat! Anda Telah Menyelesaikan Perjalanan Epik! 🏁\nDengan menyelesaikan latihan ini, berarti Anda telah menguasai seluruh rangkaian modul Listrik Dinamis: Hukum Kirchhoff! 🌟\n\nTerima kasih atas ketekunan, usaha keras, dan semangat belajar yang luar biasa! 🙏\nAnda adalah calon ilmuwan dan engineer yang hebat! 🔬⚡\nMari terus menjelajah dunia fisika yang menakjubkan! 🚀",
+                "media_ids": [
+                    13
+                ]
+            },
+            {
+                "id": 7,
+                "title": "Pembahasan Soal dan Evaluasi",
+                "content": "🌟 Selamat! Anda Telah Menyelesaikan Perjalanan Belajar yang Menantang! 🌟\nMengerjakan soal latihan adalah langkah yang sangat baik. Namun, proses belajar yang sesungguhnya terjadi ketika Anda:\n\n🔍 Memahami letak kesalahan\n🤔 Merefleksikan pemahaman\n🧱 Mengonsolidasi pengetahuan\n\nHalaman ini adalah ruang refleksi bagi kita untuk melakukan hal tersebut bersama-sama.\n\n📚 Pembahasan Soal & Kunci Jawaban\nDi halaman ini, Anda akan menemukan pembahasan lengkap dan mendetail untuk beberapa soal kunci dari latihan, baik Pilihan Ganda maupun Essay.\n\n💫 Pesan Penting untuk Perjalanan Belajarmu:\n✨ Jika nilai Anda sudah memuaskan:\nFantastic! Pertahankan dan lanjutkan semangat belajarnya!\n\n💪 Jika masih ada yang kurang:\nJangan khawatir! Ini adalah bagian normal dari proses belajar.\nKembalilah ke bahan ajar dan video pada bagian yang masih lemah.\nIngat: Belajar adalah sebuah proses, bukan tujuan akhir.\n\n🎓 Tutupan Akhir:\nAnda telah menyelesaikan modul Listrik Dinamis: Hukum Kirchhoff dengan sangat baik.\nKomitmen Anda untuk belajar hingga tahap ini sangat dihargai dan dikagumi. 🙏\n\nTeruslah berlatih dan jangan ragu untuk mengulang materi jika diperlukan.\n\n💝 Sebuah Hadiah untuk Perjalanan Belajarmu:\n\"The beautiful thing about learning is that no one can take it away from you.\"\n- B.B. King\n\nPengetahuan yang telah kamu perjuangkan hari ini akan selamanya menjadi milikmu.\nTeruslah mencari tahu, teruslah bertanya, dan nikmati setiap proses belajarnya! 🚀\n\nSampai jumpa di petualangan sains berikutnya! 👩‍🔬👨‍🔬",
+                "media_ids": [
+                    14
+                ]
+            }
+        ]
+    }
+]

@@ -3133,7 +3133,7 @@ def show_manage_students():
         st.info("Belum ada siswa yang terdaftar.")
         return
     
-    for student in students:
+    for i, student in enumerate(students):  # PAKAI enumerate UNTUK DAPAT INDEX UNIK
         with st.expander(f"🎓 {student.get('name')} ({student.get('username')})"):
             col1, col2 = st.columns([3, 1])
             with col1:
@@ -3152,12 +3152,13 @@ def show_manage_students():
                     st.write("**Progress:** Belum memulai pembelajaran")
             
             with col2:
-                if st.button("🗑️ Hapus", key=f"del_{student.get('id')}"):
+                # GUNAKAN INDEX i UNTUK MEMBUAT KEY YANG LEBIH UNIK
+                if st.button("🗑️ Hapus", key=f"del_{student.get('id')}_{i}"):
                     users.remove(student)
                     save_data(users, USERS_FILE)
                     st.success(f"✅ Siswa {student.get('name')} berhasil dihapus!")
                     st.rerun()
-
+                    
 def show_manage_modules():
     inject_custom_css()
     
